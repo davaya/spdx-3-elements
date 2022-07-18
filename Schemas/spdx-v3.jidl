@@ -1,0 +1,230 @@
+       title: "SPDX v3"
+     package: "http://spdx.org/spdx/v3/document"
+ description: "This information model defines the serialized structure of SPDXv3 logical model types"
+     license: "CC0-1.0"
+     exports: ["TransferUnit", "ElementSet"]
+
+ElementSet = MapOf(IRI, Element)                  // Serialized collection of independent Element values  (fix IRI = Link(Element))
+
+TransferUnit = Record                             // Serialized collection of contextualized Element values
+   1 namespace        IRI                         // Default namespace for Element ids in this collection (rdf BASE)
+   2 namespaceMap     NamespaceMap optional       // Namespace abbreviations (rdf PREFIX)
+   3 defaults         ElementDefaults             // Default Element properties and collection creation info
+   4 elementValues    Element [1..*]              // Element values serialized in this collection (defined or copied)
+   5 documentId       Link(Element) optional      // Optional Document element that describes this file
+   6 documentRefs     Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
+
+NamespaceMap = MapOf(IRI, Prefix){1..*}           // Prefixes = namespace abbreviations
+
+ElementDefaults = Record                          // Default Element properties, collection creation information
+   1 createdBy        Link(Element) [1..*]        // Link(Actor): set of identifiers
+   2 created          DateTime
+   3 specVersion      SemVer
+   4 profiles         ProfileIdentifier [1..*]
+   5 dataLicense      LicenseId
+
+Element = MapOf(IRI, Element$value)
+
+Element$value = Record
+   1 type             ElementType
+   2 createdBy        Link(Element) [0..*]        // required: explicit or default  - Link(Actor)
+   3 created          DateTime optional           // required: explicit or default
+   4 specVersion      SemVer optional             // required: explicit or default
+   5 profiles         ProfileIdentifier [0..*]    // required: explicit or default
+   6 dataLicense      LicenseId optional          // required: explicit or default
+   7 name             String optional
+   8 summary          String optional
+   9 description      String optional
+  10 comment          String optional
+  11 verifiedUsing    IntegrityMethod [0..*]
+  12 identifiedBy     IdentifierType [0..*]
+  13 extensions       Extensions optional
+
+ElementType = Choice
+   1 annotation       Annotation
+   2 relationship     Relationship
+   3 identity         IdentityType                // Abstract "Subject"
+   4 actor            Empty
+   5 document         Document                    // <- Collection: A file containing serialized element values
+   6 bom              BOM                         // <- Collection
+  10 snippet          Snippet                     // <- Artifact: pkg:Software
+  11 file             File                        // <- Artifact: pkg:Software
+  12 package          Package                     // <- Artifact: pkg:Software
+  13 sbom             SBOM                        // <- BOM: pkg:Software
+
+Empty = Record
+
+Annotation = Record
+   1 annotationType   AnnotationType
+   2 subject          Link(Element)
+   3 statement        String optional
+
+Relationship = Record
+   1 relationshipType RelationshipType            // just 'type'
+   2 from             Link(Element)
+   3 to               Link(Element) [1..*]
+   4 completeness     RelationshipCompleteness optional
+
+IdentityType = Choice
+   1 person           Person
+   2 organization     Organization
+   3 tool             Tool
+
+IdentifierType = Choice                           // Identifier Data Type
+   1 email            String
+   2 externalReference ExternalReference
+
+Document = Record                                 // Information about serialized document.  "verifiedUsing" is required.
+   1 elements         Link(Element) [1..*]        // Elements contained in serialized document
+   2 downloadLocation URL optional                // Location of serialized document
+
+BOM = Record
+   1 elements         Link(Element) [1..*]        // <-Collection
+   2 rootElements     Link(Element) [0..*]        // <-Collection  Unnecessary - A BOM has exactly one root: the one BOM element.
+
+Snippet = Record
+   1 location         SnippetLocation
+   2 snippetPurpose   SoftwarePurpose [0..*]
+   3 originator       Link(Element) [0..*]        // <-Artifact:  Link(Actor)
+
+File = Record
+   1 contentType      MediaType optional
+   2 filePurpose      SoftwarePurpose [0..*]
+   3 originator       Link(Element) [0..*]        // <-Artifact:  Link(Actor)
+
+Package = Record
+   1 packagePurpose   SoftwarePurpose [0..*]
+   2 downloadLocation URL optional
+   3 homePage         URL optional
+   4 originator       Link(Element) [0..*]        // <-Artifact:  Link(Actor)
+
+SBOM = Record
+   1 elements         Link(Element) [1..*]        // <-Collection
+   2 rootElements     Link(Element) [0..*]        // <-Collection  Unnecessary
+
+Person = Record
+
+Organization = Record
+
+Tool = Record
+   1 userAgent        String
+
+IntegrityMethod = Choice
+   1 hashes           Hashes
+   2 signature        PublicKeySignature          // A public key by itself is not a checksum
+
+Hashes = Map{1..*}
+   1 md5              Binary{16..16} /x optional
+   2 sha1             Binary{20..20} /x optional
+   3 sha256           Binary{32..32} /x optional
+
+PublicKeySignature = Record
+
+Extensions = MapOf(IRI, String)                   // Placeholder to define extension types
+
+DateTime = String                                 // implement Integer /datetime_ms
+
+MediaType = String
+
+Prefix = String{1..16}                            // Abbreviation for document namespace
+
+SemVer = String
+
+SnippetLocation = Record
+
+IRI = String /uri                                 // Element id:  local, prefix:local, or absolute-IRI
+
+URL = String /uri                                 // IRI, must be a locator
+
+LicenseId = Enumerated                            // From license list: referenceNumber, licenseId  // name
+ 451 Apache-2.0                                   // Apache License 2.0
+ 457 CC0-1.0                                      // Creative Commons Zero v1.0 Universal
+
+ExternalReference = Record
+   1 type             ExternalReferenceType
+   2 locator          IRI                         // URL - must be a locator
+
+ExternalReferenceType = Enumerated                // Invalid without at least one defined value
+   1 FOO                                          // TBSL
+
+ProfileIdentifier = Enumerated                    // Shown as "pkg" on logical model diagram, use upper case names?
+   1 Core
+   2 Software
+   3 License                                      // TBSL
+
+RelationshipCompleteness = Enumerated
+   1 KNOWN
+   2 INCOMPLETE
+   3 UNKNOWN
+
+SoftwarePurpose = Enumerated
+   1 APPLICATION
+   2 FRAMEWORK
+   3 LIBRARY
+   4 CONTAINER
+   5 OPERATING-SYSTEM
+   6 DEVICE
+   7 FIRMWARE
+   8 SOURCE
+   9 PATCH
+  10 ARCHIVE
+  11 CONFIGURATION
+  12 DATA
+  13 DOCUMENTATION
+  14 EXECUTABLE
+  15 MODULE
+  16 BOM
+  99 OTHER
+
+AnnotationType = Enumerated
+   1 REVIEW
+   9 OTHER
+
+RelationshipType = Enumerated
+   0 NONE
+   1 DESCRIBES
+   2 DESCRIBED_BY
+   3 CONTAINS
+   4 CONTAINED_BY
+   5 DEPENDS_ON
+   6 DEPENDENCY_OF
+   7 DEPENDENCY_MANIFEST_OF
+   8 BUILD_DEPENDENCY_OF
+   9 DEV_DEPENDENCY_OF
+  10 OPTIONAL_DEPENDENCY_OF
+  11 PROVIDED_DEPENDENCY_OF
+  12 TEST_DEPENDENCY_OF
+  13 RUNTIME_DEPENDENCY_OF
+  14 EXAMPLE_OF
+  15 GENERATES
+  16 GENERATED_FROM
+  17 ANCESTOR_OF
+  18 DESCENDANT_OF
+  19 VARIANT_OF
+  20 DISTRIBUTION_ARTIFACT
+  21 PATCH_FOR
+  22 PATCH_APPLIED
+  23 COPY_OF
+  24 FILE_ADDED
+  25 FILE_DELETED
+  26 FILE_MODIFIED
+  27 EXPANDED_FROM_ARCHIVE
+  28 DYNAMIC_LINK
+  29 STATIC_LINK
+  30 DATA_FILE_OF
+  31 TEST_CASE_OF
+  32 BUILD_TOOL_OF
+  33 DEF_TOOL_OF
+  34 TEST_OF
+  35 TEST_TOOL_OF
+  36 DOCUMENTATION_OF
+  37 OPTIONAL_COMPONENT_OF
+  38 METAFILE_OF
+  39 PACKAGE_OF
+  40 AMENDS
+  41 PREREQUISITE_FOR
+  42 HAS_PREREQUISITE
+  43 SUPPLIED_BY                                  // 3.0
+  44 ALSO_KNOWN_AS                                // 3.0
+  98 NOASSERTION
+  99 OTHER
