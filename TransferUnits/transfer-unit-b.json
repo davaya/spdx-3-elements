@@ -2,7 +2,7 @@
   "namespace": "http://sw.baker.org/",
   "namespaceMap": {"acme": "urn:acme.dev:"},
   "defaults": {
-    "createdBy": ["http://sw.baker.org/ids/betty"],
+    "createdBy": ["ids/betty"],
     "created": "2022-05-02T09:15:00Z",
     "specVersion": "3.0",
     "profiles": ["Core", "Software"],
@@ -13,7 +13,7 @@
       "type": {
         "package": {
           "packagePurpose": ["APPLICATION", "SOURCE"],
-          "downloadLocation": "http://sw.baker.org/pkgs/widget-v2.3.zip",
+          "downloadLocation": "https://sw.baker.org/pkgs/widget-v2.3.zip",
           "homePage": "https://www.baker.org"
         }
       }
@@ -28,8 +28,8 @@
       "type": {
         "sbom": {
           "elements": [
-            "http://sw.baker.org/pkgs/widget-v2.3",
-            "http://sw.baker.org/ids/betty",
+            "pkgs/widget-v2.3",
+            "ids/betty",
             "acme:artifacts:gnu-coreutils/v9.1",
             "acme:identities:fred"
           ]
