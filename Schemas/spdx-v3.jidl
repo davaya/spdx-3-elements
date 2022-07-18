@@ -4,7 +4,7 @@
      license: "CC0-1.0"
      exports: ["TransferUnit", "ElementSet"]
 
-ElementSet = MapOf(IRI, Element)                  // Serialized collection of independent Element values  (fix IRI = Link(Element))
+ElementSet = MapOf(IRI, Element$value)            // Serialized collection of independent Element values
 
 TransferUnit = Record                             // Serialized collection of contextualized Element values
    1 namespace        IRI                         // Default namespace for Element ids in this collection (rdf BASE)
@@ -23,7 +23,7 @@ ElementDefaults = Record                          // Default Element properties,
    4 profiles         ProfileIdentifier [1..*]
    5 dataLicense      LicenseId
 
-Element = MapOf(IRI, Element$value)
+Element = MapOf(IRI, Element$value){1..1}
 
 Element$value = Record
    1 type             ElementType
