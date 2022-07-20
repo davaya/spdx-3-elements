@@ -1,15 +1,14 @@
 {
   "namespace": "http://sw.baker.org/",
   "namespaceMap": {"acme": "urn:acme.dev:"},
-  "defaults": {
-    "createdBy": ["ids/betty"],
-    "created": "2022-05-02T09:15:00Z",
-    "specVersion": "3.0",
-    "profiles": ["Core", "Software"],
-    "dataLicense": "CC0-1.0"
-  },
-  "elementValues": {
-    "pkgs/widget-v2.3": {
+  "createdBy": ["ids/betty"],
+  "created": "2022-05-02T09:15:00Z",
+  "specVersion": "3.0",
+  "profiles": ["Core", "Software"],
+  "dataLicense": "CC0-1.0",
+  "elementValues": [
+    {
+      "id": "pkgs/widget-v2.3",
       "type": {
         "package": {
           "packagePurpose": ["APPLICATION", "SOURCE"],
@@ -18,13 +17,15 @@
         }
       }
     },
-    "ids/betty": {
+    {
+      "id": "ids/betty",
       "type": {
         "actor": {}
       },
       "identifiedBy": [{"email": "betty@baker.org"}]
     },
-    "widget-v2.3": {
+    {
+      "id": "widget-v2.3",
       "type": {
         "sbom": {
           "elements": [
@@ -36,9 +37,10 @@
         }
       }
     },
-    "docs/acme-docs/gnu-coreutils-sbom.json": {
+    {
+      "id": "docs/acme-docs/gnu-coreutils-sbom.json",
       "type": {
-        "document": {
+        "spdxFile": {
           "elements": [
             "acme:artifacts:gnu-coreutils/v9.1/src/du.c",
             "acme:artifacts:gnu-coreutils/v9.1/src/echo.c",
@@ -51,6 +53,6 @@
         }
       }
     }
-  },
-  "documentRefs": ["docs/acme-docs/gnu-coreutils-sbom.json"]
+  ],
+  "spdxFileRefs": ["docs/acme-docs/gnu-coreutils-sbom.json"]
 }

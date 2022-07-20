@@ -4,48 +4,42 @@
      license: "CC0-1.0"
      exports: ["TransferUnit", "ElementSet"]
 
-ElementSet = MapOf(IRI, Element$value)            // Serialized collection of independent Element values
+ElementSet = ArrayOf(Element)                     // Serialized collection of independent Element values
 
 TransferUnit = Record                             // Serialized collection of contextualized Element values
    1 namespace        IRI                         // Default namespace for Element ids in this collection (rdf BASE)
    2 namespaceMap     NamespaceMap optional       // Namespace abbreviations (rdf PREFIX)
-   3 defaults         ElementDefaults             // Default Element properties and collection creation info
-   4 elementValues    Element [1..*]              // Element values serialized in this collection (defined or copied)
-   5 documentId       Link(Element) optional      // Optional Document element that describes this file
-   6 documentRefs     Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
+   3 createdBy        Link(Element) [1..*]        // default: Link(Actor): set of identifiers
+   4 created          DateTime                    // default
+   5 specVersion      SemVer                      // default
+   6 profiles         ProfileIdentifier [1..*]    // default
+   7 dataLicense      LicenseId                   // default
+   8 elementValues    Element [1..*]              // Element values serialized in this collection (defined or copied)
+   9 spdxFileId       Link(Element) optional      // Optional Document element that describes this file
+  10 spdxFileRefs     Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
 
-NamespaceMap = MapOf(IRI, Prefix){1..*}           // Prefixes = namespace abbreviations
-
-ElementDefaults = Record                          // Default Element properties, collection creation information
-   1 createdBy        Link(Element) [1..*]        // Link(Actor): set of identifiers
-   2 created          DateTime
-   3 specVersion      SemVer
-   4 profiles         ProfileIdentifier [1..*]
-   5 dataLicense      LicenseId
-
-Element = MapOf(IRI, Element$value){1..1}
-
-Element$value = Record
-   1 type             ElementType
-   2 createdBy        Link(Element) [0..*]        // required: explicit or default  - Link(Actor)
-   3 created          DateTime optional           // required: explicit or default
-   4 specVersion      SemVer optional             // required: explicit or default
-   5 profiles         ProfileIdentifier [0..*]    // required: explicit or default
-   6 dataLicense      LicenseId optional          // required: explicit or default
-   7 name             String optional
-   8 summary          String optional
-   9 description      String optional
-  10 comment          String optional
-  11 verifiedUsing    IntegrityMethod [0..*]
-  12 identifiedBy     IdentifierType [0..*]
-  13 extensions       Extensions optional
+Element = Record
+   1 id               Key(IRI)                    // Element unique identifier
+   2 type             ElementType
+   3 createdBy        Link(Element) [0..*]        // required: explicit or default  - Link(Actor)
+   4 created          DateTime optional           // required: explicit or default
+   5 specVersion      SemVer optional             // required: explicit or default
+   6 profiles         ProfileIdentifier [0..*]    // required: explicit or default
+   7 dataLicense      LicenseId optional          // required: explicit or default
+   8 name             String optional
+   9 summary          String optional
+  10 description      String optional
+  11 comment          String optional
+  12 verifiedUsing    IntegrityMethod [0..*]
+  13 identifiedBy     IdentifierType [0..*]
+  14 extensions       Extensions optional
 
 ElementType = Choice
    1 annotation       Annotation
    2 relationship     Relationship
    3 identity         IdentityType                // Abstract "Subject"
    4 actor            Empty
-   5 document         Document                    // <- Collection: A file containing serialized element values
+   5 spdxFile         Document                    // <- Collection: A file containing serialized element values
    6 bom              BOM                         // <- Collection
   10 snippet          Snippet                     // <- Artifact: pkg:Software
   11 file             File                        // <- Artifact: pkg:Software

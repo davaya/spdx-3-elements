@@ -37,11 +37,13 @@ class TransferUnit():
                     element = self.codec.decode('Element', json.load(fp))
                 self.elements.update(element)
 
-    def make(self, namespace: str, elements: list[str]):
-        self.foo = True
 
-    def split(self, unit: str):
-        self.foo = True
+def make(namespace: str, elements: list[str]):
+    return
+
+
+def split(unit: str):
+    return
 
 
 if __name__ == '__main__':

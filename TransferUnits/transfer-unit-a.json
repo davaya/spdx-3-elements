@@ -1,28 +1,29 @@
 {
   "namespace": "urn:acme.dev:",
-  "defaults": {
-    "createdBy": ["identities:fred"],
-    "created": "2022-04-05T22:00:00Z",
-    "specVersion": "3.0",
-    "profiles": ["Core", "Software"],
-    "dataLicense": "CC0-1.0"
-  },
-  "elementValues": {
-    "artifacts:gnu-coreutils/v9.1/src/du.c": {
+  "createdBy": ["identities:fred"],
+  "created": "2022-04-05T22:00:00Z",
+  "specVersion": "3.0",
+  "profiles": ["Core", "Software"],
+  "dataLicense": "CC0-1.0",
+  "elementValues": [
+    {
+      "id": "artifacts:gnu-coreutils/v9.1/src/du.c",
       "type": {
         "file": {
           "filePurpose": ["APPLICATION", "SOURCE"]
         }
       }
     },
-    "artifacts:gnu-coreutils/v9.1/src/echo.c": {
+    {
+      "id": "artifacts:gnu-coreutils/v9.1/src/echo.c",
       "type": {
         "file": {
           "filePurpose": ["APPLICATION", "SOURCE"]
         }
       }
     },
-    "artifacts:gnu-coreutils/v9.1": {
+    {
+      "id": "artifacts:gnu-coreutils/v9.1",
       "type": {
         "package": {
           "packagePurpose": ["APPLICATION", "SOURCE"],
@@ -32,7 +33,8 @@
       },
       "name": "GNU Coreutils"
     },
-    "relationships:gnu-coreutils/v9.1": {
+    {
+      "id": "relationships:gnu-coreutils/v9.1",
       "type": {
         "relationship": {
           "relationshipType": "CONTAINS",
@@ -44,13 +46,15 @@
         }
       }
     },
-    "identities:fred": {
+    {
+      "id": "identities:fred",
       "type": {
         "actor": {}
       },
       "identifiedBy": [{"email": "fred@acme.com"}]
     },
-    "sboms:gnu-coreutils/v9.1": {
+    {
+      "id": "sboms:gnu-coreutils/v9.1",
       "type": {
         "sbom": {
           "elements": [
@@ -63,5 +67,5 @@
         }
       }
     }
-  }
+  ]
 }
