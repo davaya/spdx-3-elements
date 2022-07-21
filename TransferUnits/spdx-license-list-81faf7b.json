@@ -1,0 +1,71 @@
+{
+  "namespace": "urn:spdx.org:licenses:81faf7b:",
+  "createdBy": ["urn:spdx.org:identities:license-authority"],
+  "created": "2022-04-02T11:00:00Z",
+  "specVersion": "3.0",
+  "profiles": ["Core", "License"],
+  "dataLicense": "CC0-1.0",
+  "elementValues": [
+    {
+      "id": 0,
+      "type": {
+        "license": {
+          "referenceNumber": 0,
+          "licenseId": "CC-BY-NC-ND-3.0",
+          "name": "Creative Commons Attribution Non Commercial No Derivatives 3.0 Unported",
+          "isOsiApproved": false,
+          "isFsfLibre": false,
+          "isDeprecatedLicenseId": false,
+          "reference": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.html",
+          "detailsUrl": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.json",
+          "seeAlso": [
+            "https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode"
+          ]
+        }
+      }
+    },
+    {
+      "id": "33",
+      "type": {
+        "license": {
+          "referenceNumber": 33,
+          "licenseId": "Apache-2.0",
+          "name": "Apache License 2.0",
+          "isOsiApproved": true,
+          "isFsfLibre": true,
+          "isDeprecatedLicenseId": false,
+          "reference": "https://spdx.org/licenses/Apache-2.0.html",
+          "detailsUrl": "https://spdx.org/licenses/Apache-2.0.json",
+          "seeAlso": [
+            "https://www.apache.org/licenses/LICENSE-2.0",
+            "https://opensource.org/licenses/Apache-2.0"
+          ]
+        }
+      }
+    },
+    {
+      "id": "urn:spdx.org:identities:license-authority",
+      "type": {
+        "actor": {}
+      },
+      "identifiedBy": [
+        {"email": "license-authority@spdx.org"}
+      ]
+    },
+    {
+      "id": "license-list",
+      "type": {
+        "spdxFile": {
+          "elements": [
+            "0",
+            "33",
+            "urn:spdx.org:identities:license-authority",
+            "license-list"
+          ],
+          "downloadLocation": "http://spdx.org/license-list/81faf7b.json"
+        }
+      }
+    }
+  ],
+  "name": "SPDX License List, Version 81faf7b"
+}

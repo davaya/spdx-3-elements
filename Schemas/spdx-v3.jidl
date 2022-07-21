@@ -18,6 +18,8 @@ TransferUnit = Record                             // Serialized collection of co
    9 spdxFileId       Link(Element) optional      // Optional Document element that describes this file
   10 spdxFileRefs     Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
 
+NamespaceMap = MapOf(Prefix, IRI)
+
 Element = Record
    1 id               Key(IRI)                    // Element unique identifier
    2 type             ElementType
@@ -45,6 +47,7 @@ ElementType = Choice
   11 file             File                        // <- Artifact: pkg:Software
   12 package          Package                     // <- Artifact: pkg:Software
   13 sbom             SBOM                        // <- BOM: pkg:Software
+  14 license          License                     // pkg:License
 
 Empty = Record
 
@@ -94,7 +97,17 @@ Package = Record
 
 SBOM = Record
    1 elements         Link(Element) [1..*]        // <-Collection
-   2 rootElements     Link(Element) [0..*]        // <-Collection  Unnecessary
+   2 rootElements     Link(Element) [0..*]        // <-Collection
+
+License = Record
+   1 referenceNumber  Integer
+   2 licenseId        String
+   3 isOsiApproved    Boolean
+   4 isFsfLibre       Boolean
+   5 isDeprecatedLicenseId Boolean
+   6 reference        URL optional
+   7 detailsUrl       URL optional
+   8 seeAlso          URL [0..*]
 
 Person = Record
 
