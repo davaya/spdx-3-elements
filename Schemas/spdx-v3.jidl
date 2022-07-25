@@ -100,14 +100,13 @@ SBOM = Record
    2 rootElements     Link(Element) [0..*]        // <-Collection
 
 License = Record
-   1 referenceNumber  Integer
-   2 licenseId        String
+   1 licenseId        String
+   2 source           URL [1..*]
    3 isOsiApproved    Boolean
    4 isFsfLibre       Boolean
    5 isDeprecatedLicenseId Boolean
    6 reference        URL optional
    7 detailsUrl       URL optional
-   8 seeAlso          URL [0..*]
 
 Person = Record
 

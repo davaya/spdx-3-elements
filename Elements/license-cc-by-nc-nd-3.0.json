@@ -1,17 +1,16 @@
 {
-  "id": "urn:spdx.org:licenses:81faf7b:0",
+  "id": "urn:spdx.org:licenses:cc-by-nc-nd-3.0",
   "type": {
     "license": {
-      "referenceNumber": 0,
       "licenseId": "CC-BY-NC-ND-3.0",
+      "source": [
+        "https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode"
+      ],
       "isOsiApproved": false,
       "isFsfLibre": false,
       "isDeprecatedLicenseId": false,
       "reference": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.html",
-      "detailsUrl": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.json",
-      "seeAlso": [
-        "https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode"
-      ]
+      "detailsUrl": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.json"
     }
   },
   "createdBy": ["urn:licenses.spdx.org:identities:license-authority"],

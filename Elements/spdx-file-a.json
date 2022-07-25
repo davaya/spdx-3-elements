@@ -1,0 +1,21 @@
+{
+  "id": "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom",
+  "type": {
+    "spdxFile": {
+      "elements": [
+        "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/du.c",
+        "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/echo.c",
+        "urn:acme.dev:artifacts:gnu-coreutils/v9.1",
+        "urn:acme.dev:relationships:gnu-coreutils/v9.1",
+        "urn:acme.dev:identities:fred",
+        "urn:acme.dev:sboms:gnu-coreutils/v9.1"
+      ],
+      "downloadLocation": "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom.json"
+    }
+  },
+  "createdBy": ["http://sw.baker.org/ids/betty"],
+  "created": "2022-05-02T09:15:00Z",
+  "specVersion": "3.0",
+  "profiles": ["Core", "Software"],
+  "dataLicense": "CC0-1.0"
+}
