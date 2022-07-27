@@ -33,7 +33,7 @@ class TransferUnit():
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
         elements = read_elements(DATA_DIR, codec)
-        with open(os.path.join([TEMPLATE_DIR, template_file])) as tf:
+        with open(os.path.join(TEMPLATE_DIR, template_file)) as tf:
             template = json.load(tf)
 
         tu = {'namespace': template['namespace']}
