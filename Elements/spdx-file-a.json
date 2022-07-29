@@ -1,7 +1,7 @@
 {
   "id": "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom",
   "type": {
-    "spdxFile": {
+    "spdxDocument": {
       "elements": [
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/du.c",
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/echo.c",

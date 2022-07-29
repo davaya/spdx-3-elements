@@ -8,7 +8,7 @@ import os
 
 SCHEMA = 'Schemas/spdx-v3.jidl'
 DATA_DIR = 'Elements'
-TEMPLATE_DIR = DATA_DIR + '/Templates'
+CONFIG_DIR = DATA_DIR + '/Config'
 OUTPUT_DIR = 'Out'
 
 
@@ -25,7 +25,7 @@ def read_elements(dirname: str, codec):
 
 class TransferUnit():
 
-    def make(self, template_file: str = 'baker-a1.json'):
+    def make(self, config_file: str = 'baker-a1.json'):
 
         with open(SCHEMA) as fp:
             schema = jadn.load_any(fp)
@@ -33,14 +33,22 @@ class TransferUnit():
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
         elements = read_elements(DATA_DIR, codec)
-        with open(os.path.join(TEMPLATE_DIR, template_file)) as tf:
-            template = json.load(tf)
+        ex = {e['id']: e for e in elements}
+        print(f'{len(elements)} elements read')
+        with open(os.path.join(CONFIG_DIR, config_file)) as tf:
+            config = json.load(tf)
 
-        tu = {'namespace': template['namespace']}
-        nm = template.get('namespaceMap')
-        tu.update({'namespaceMap': nm} if nm else {})
+        sf = {'namespace': config['namespace']}
+        nm = config.get('namespaceMap')
+        sf.update({'namespaceMap': nm} if nm else {})
+
+        with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
+            json.dump(sf, ofile, indent=2)
 
     def split(self, spdx_file: str):
+        return
+
+    def check(self, spdx_file: str):
         return
 
 

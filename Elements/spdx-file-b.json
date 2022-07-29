@@ -1,7 +1,7 @@
 {
   "id": "http://sw.baker.org/spdx-files/widget-v2.3",
   "type": {
-    "spdxFile": {
+    "spdxDocument": {
       "elements": [
         "http://sw.baker.org/pkgs/widget-v2.3",
         "http://sw.baker.org/ids/betty",

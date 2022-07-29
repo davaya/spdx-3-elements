@@ -40,7 +40,7 @@
     {
       "id": "docs/acme-docs/gnu-coreutils-sbom.json",
       "type": {
-        "spdxFile": {
+        "spdxDocument": {
           "elements": [
             "acme:artifacts:gnu-coreutils/v9.1/src/du.c",
             "acme:artifacts:gnu-coreutils/v9.1/src/echo.c",
@@ -54,5 +54,5 @@
       }
     }
   ],
-  "spdxFileRefs": ["docs/acme-docs/gnu-coreutils-sbom.json"]
+  "spdxDocumentRefs": ["docs/acme-docs/gnu-coreutils-sbom.json"]
 }

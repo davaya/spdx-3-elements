@@ -1,5 +1,0 @@
-{
-  "namespace": "http://sw.baker.org/",
-  "namespaceMap": {"acme": "urn:acme.dev:"},
-  "spdxFileId": "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom"
-}

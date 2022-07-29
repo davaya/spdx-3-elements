@@ -1,0 +1,7 @@
+{
+  "namespace": "http://sw.baker.org/",
+  "namespaceMap": {"acme": "urn:acme.dev:"},
+  "include": ["http://sw.baker.org/spdx-files/widget-v2.3"],
+  "exclude": [],
+  "filename": "spdx-file-b.json"
+}

@@ -1,0 +1,7 @@
+{
+  "namespace": "http://sw.baker.org/",
+  "namespaceMap": {"acme": "urn:acme.dev:"},
+  "include": ["http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom"],
+  "exclude": [],
+  "filename": "spdx-file-a.json"
+}

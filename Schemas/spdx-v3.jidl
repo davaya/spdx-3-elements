@@ -15,8 +15,8 @@ TransferUnit = Record                             // Serialized collection of co
    6 profiles         ProfileIdentifier [1..*]    // default
    7 dataLicense      LicenseId                   // default
    8 elementValues    Element [1..*]              // Element values serialized in this collection (defined or copied)
-   9 spdxFileId       Link(Element) optional      // Optional Document element that describes this file
-  10 spdxFileRefs     Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
+   9 spdxDocumentId   Link(Element) optional      // Optional Document element that describes this file
+  10 spdxDocumentRefs Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
 
 NamespaceMap = MapOf(Prefix, IRI)
 
@@ -41,7 +41,7 @@ ElementType = Choice
    2 relationship     Relationship
    3 identity         IdentityType                // Abstract "Subject"
    4 actor            Empty
-   5 spdxFile         Document                    // <- Collection: A file containing serialized element values
+   5 spdxDocument     SpdxDocument                // <- Collection: A file containing serialized element values
    6 bom              BOM                         // <- Collection
   10 snippet          Snippet                     // <- Artifact: pkg:Software
   11 file             File                        // <- Artifact: pkg:Software
@@ -71,13 +71,13 @@ IdentifierType = Choice                           // Identifier Data Type
    1 email            String
    2 externalReference ExternalReference
 
-Document = Record                                 // Information about serialized document.  "verifiedUsing" is required.
+SpdxDocument = Record                             // Statements about serialized document.  "verifiedUsing" is required.
    1 elements         Link(Element) [1..*]        // Elements contained in serialized document
    2 downloadLocation URL optional                // Location of serialized document
 
 BOM = Record
    1 elements         Link(Element) [1..*]        // <-Collection
-   2 rootElements     Link(Element) [0..*]        // <-Collection  Unnecessary - A BOM has exactly one root: the one BOM element.
+   2 rootElements     Link(Element) [0..*]        // <-Collection  This element is a root. Other containers that it contains?
 
 Snippet = Record
    1 location         SnippetLocation
