@@ -8,7 +8,7 @@ ElementSet = ArrayOf(Element)                     // Serialized collection of in
 
 TransferUnit = Record                             // Serialized collection of contextualized Element values
    1 namespace        IRI                         // Default namespace for Element ids in this collection (rdf BASE)
-   2 namespaceMap     NamespaceMap optional       // Namespace abbreviations (rdf PREFIX)
+   2 prefixes         NamespaceMap optional       // Namespace abbreviations (rdf PREFIX)
    3 createdBy        Link(Element) [1..*]        // default: Link(Actor): set of identifiers
    4 created          DateTime                    // default
    5 specVersion      SemVer                      // default
@@ -134,7 +134,7 @@ MediaType = String
 
 Prefix = String{1..16}                            // Abbreviation for document namespace
 
-SemVer = String
+SemVer = String{pattern="^(\d{1,4})\.(\d{1,6})$"} // m.n: "3.141592" is valid, "3.14159262" is not.
 
 SnippetLocation = Record
 
