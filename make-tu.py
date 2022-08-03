@@ -11,7 +11,7 @@ SCHEMA = 'Schemas/spdx-v3.jidl'
 DATA_DIR = 'Elements'
 CONFIG_DIR = DATA_DIR + '/Config'
 OUTPUT_DIR = 'Out'
-DEFAULT_PROPERTIES = ('specVersion', 'created', 'createdBy', 'profile', 'dataLicense')
+DEFAULT_PROPERTIES = ('created', 'createdBy', 'specVersion', 'profile', 'dataLicense')
 IRI_LOCATIONS = ['id', 'created/by', '*/elements/*', 'relationship/from', 'relationship/to/*',
                  '*/originator', 'elementRefs/id', 'annotation/subject']
 
@@ -115,16 +115,17 @@ def read_elements(dirname: str, codec):
 
 
 class TransferUnit():
-    """
-    Serialize individual elements into an SPDX file
 
-    Config file:
-      * namespace: base IRI for this file
-      * namespaceMap: named IRI prefixes
-      * include: elements to include, including subtree of all referenced elements
-      * exclude: don't include specific elements from subtree
-    """
     def make(self, config_file: str = 'baker-a1.json'):
+        """
+        Serialize individual elements into an SPDX file
+
+        Config file:
+          * namespace: base IRI for this file
+          * namespaceMap: named IRI prefixes
+          * include: elements to include, including subtree of all referenced elements
+          * exclude: don't include specific elements from subtree
+        """
         with open(os.path.join(CONFIG_DIR, config_file)) as tf:
             config = json.load(tf)
         with open(SCHEMA) as fp:
@@ -144,11 +145,15 @@ class TransferUnit():
             json.dump(sf, ofile, indent=2)
 
     def split(self, spdx_file: str):
+        """
+        Split an SPDX file into a list of independent elements
+        """
         return
 
     def check(self, spdx_file: str):
         """
-        Check an SPDX file:
+        Check an SPDX file
+
           * Element timestamps must be same as or before file timestamp
           * IRIs that are referenced but not listed in spdfDocumentRefs
           * IRIs without namespace prefixes

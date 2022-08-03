@@ -6,25 +6,28 @@
 
 ElementSet = ArrayOf(Element)                     // Serialized collection of independent Element values
 
-TransferUnit = Record                             // Serialized collection of contextualized Element values
-   1 namespace        IRI                         // Default namespace for Element ids in this collection (rdf BASE)
-   2 prefixes         NamespaceMap optional       // Namespace abbreviations (rdf PREFIX)
-   3 createdBy        Link(Element) [1..*]        // default: Link(Actor): set of identifiers
-   4 created          DateTime                    // default
-   5 specVersion      SemVer                      // default
-   6 profiles         ProfileIdentifier [1..*]    // default
-   7 dataLicense      LicenseId                   // default
-   8 elementValues    Element [1..*]              // Element values serialized in this collection (defined or copied)
-   9 spdxDocumentId   Link(Element) optional      // Optional Document element that describes this file
-  10 spdxDocumentRefs Link(Element) [0..*]        // Link(Document): Document elements that describe referenced files
+TransferUnit = Record                             // Serialized file (or equivalent) for transferring Elements
+   1 namespace        IRI                         // Default namespace for Element ids in this file (rdf BASE)
+   2 prefixes         NamespaceMap optional       // Namespace abbreviations in this file (rdf PREFIX)
+   3 creationInfo     CreationInfo                // File creation info and defaults for Element values
+   4 elementValues    Element [1..*]              // Element values serialized in this collection (defined or copied)
+   5 spdxDocumentId   Link(Element) optional      // Optional: Id of SpdxDocument element that describes this file
+   6 spdxDocumentRefs Link(Element) [0..*]        // Ids of SpdxDocument elements that describe referenced files
 
 NamespaceMap = MapOf(Prefix, IRI)
+
+CreationInfo = Record                             // File creation info and default Element values
+   1 createdBy        Link(Element) [1..*]        // Link(Actor): set of identifiers
+   2 createdWhen      DateTime
+   3 specVersion      SemVer
+   4 profiles         ProfileIdentifier [1..*]
+   5 dataLicense      LicenseId
 
 Element = Record
    1 id               Key(IRI)                    // Element unique identifier
    2 type             ElementType
    3 createdBy        Link(Element) [0..*]        // required: explicit or default  - Link(Actor)
-   4 created          DateTime optional           // required: explicit or default
+   4 createdWhen      DateTime optional           // required: explicit or default
    5 specVersion      SemVer optional             // required: explicit or default
    6 profiles         ProfileIdentifier [0..*]    // required: explicit or default
    7 dataLicense      LicenseId optional          // required: explicit or default
