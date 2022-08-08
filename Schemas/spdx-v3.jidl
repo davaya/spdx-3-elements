@@ -14,8 +14,8 @@ SpdxFile = Record                                 // Serialized file (or equival
    5 specVersion      SemVer                      // File creation info and element defaults
    6 profiles         ProfileIdentifier [1..*]    // File creation info and element defaults
    7 dataLicense      LicenseId                   // File creation info and element defaults
-   8 elementValues    Element [1..*]              // Element values defined in this file or copied
-   9 spdxDocumentId   Link(Element) optional      // Optional: SpdxDocument element that describes this file
+   8 elementValues    Element [1..*]              // Element values, defined in this file or copied
+   9 spdxDocumentId   Link(Element) optional      // Optional SpdxDocument element that describes this file
   10 spdxDocumentRefs Link(Element) [0..*]        // SpdxDocument elements that describe referenced files
 
 NamespaceMap = MapOf(Prefix, IRI)

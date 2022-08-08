@@ -1,5 +1,12 @@
 """
-Create an SPDXv3 TransferUnit (document) from a set of element files
+Create, split, check or translate an SPDXv3 file (transfer unit)
+
+Directories:
+ * Elements - individual SPDXv3 elements
+ * Elements/Config - configuration files defining elements to be serialized into an SpdxFile
+ * Schemas - Syntax-agnostic schema defining the SpdxFile datatype
+ * SpdxFiles - Serialized files (transfer units) containing multiple elements
+ * Out - individual elements and SpdxFiles created by this script
 """
 import fire
 import jadn
@@ -125,11 +132,11 @@ def read_elements(dirname: str, codec):
 
 class SpdxFile():
 
-    def make(self, config_file: str = 'Config/baker-b1.json'):
+    def make(self, config: str):
         """
         Serialize individual elements into an SPDX file
 
-        Config file:
+        CONFIG: JSON file that defines how to generate the SPDX file:
           * namespace: base IRI for this file (rdf BASE)
           * prefixes: named IRI prefixes (rdf PREFIX)
           * creationInfo: element containing SPDX file creation info, not necessarily included in file
@@ -137,8 +144,8 @@ class SpdxFile():
           * exclude: don't include specific elements from subtree
           * filename: SPDX file to create
         """
-        with open(os.path.join(DATA_DIR,config_file)) as tf:
-            config = json.load(tf)
+        with open(os.path.join(DATA_DIR, 'Config', config)) as cf:
+            config = json.load(cf)
         with open(SCHEMA) as fp:
             schema = jadn.load_any(fp)
         codec = jadn.codec.Codec(schema, verbose_rec=True, verbose_str=True)
@@ -153,11 +160,14 @@ class SpdxFile():
         sfile.update({'prefixes': prefixes} if prefixes else {})
         sfile.update({k: ex[config['creationInfo']][k] for k in DEFAULT_PROPERTIES})
 
-        context = {'ids': []}
-        context.update(sfile)
         elist = config['include']
-        sfile['elementValues'] = [compress_element(context, ex[k]) for k in elist]
-        sfile['createdBy'] = [compress_iri(context, k) for k in context['createdBy']]
+        while elist:
+            sfile['ids'] = []
+            sfile['elementValues'] = [compress_element(sfile, ex[k]) for k in elist]
+            el = [k for k in sfile['ids'] if k not in elist]
+            elist = el
+        sfile['createdBy'] = [compress_iri(sfile, k) for k in sfile['createdBy']]
+        del sfile['ids']
 
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
             json.dump(sfile, ofile, indent=2)
