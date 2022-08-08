@@ -9,9 +9,8 @@ from urllib.parse import urlparse
 
 SCHEMA = 'Schemas/spdx-v3.jidl'
 DATA_DIR = 'Elements'
-CONFIG_DIR = DATA_DIR + '/Config'
 OUTPUT_DIR = 'Out'
-DEFAULT_PROPERTIES = ('created', 'createdBy', 'specVersion', 'profile', 'dataLicense')
+DEFAULT_PROPERTIES = ('createdBy', 'createdWhen', 'specVersion', 'profiles', 'dataLicense')
 IRI_LOCATIONS = ['id', 'created/by', '*/elements/*', 'relationship/from', 'relationship/to/*',
                  '*/originator', 'elementRefs/id', 'annotation/subject']
 
@@ -53,8 +52,8 @@ def expand_ids(context: dict, element: dict, paths: list) -> None:
     Hardcode IRI locations for now; replace with path-driven update
     """
     element.update({'id': expand_iri(context, element['id'])})
-    if 'created' in element:
-        element['created']['by'] = [expand_iri(context, k) for k in element['created']['by']]
+    if 'createdBy' in element:
+        element['createdBy'] = [expand_iri(context, k) for k in element['createdBy']]
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
@@ -70,25 +69,32 @@ def compress_ids(context: dict, element: dict) -> None:
     """
     Convert all IRIs in an element from absolute IRI to namespace:local form
 
+    Add all IRIs in the element to context['ids']
     Hardcode IRI locations for now; replace with path-driven update
     """
+    ids = [element['id']]
     element.update({'id': compress_iri(context, element['id'])})
-    if 'created' in element:
-        element['created']['by'] = [compress_iri(context, k) for k in element['created']['by']]
+    if 'createdBy' in element:
+        ids += element['createdBy']
+        element['createdBy'] = [compress_iri(context, k) for k in element['createdBy']]
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
+                ids += eprops[p]
                 eprops[p] = [compress_iri(context, k) for k in eprops[p]]
         if etype == 'annotation':
+            ids += eprops['subject']
             eprops['subject'] = compress_iri(context, eprops['subject'])
         elif etype == 'relationship':
+            ids += eprops['from'] + eprops['to']
             eprops['from'] = compress_iri(context, eprops['from'])
             eprops['to'] = [compress_iri(context, k) for k in eprops['to']]
+    context['ids'] += ids
 
 
 def expand_element(context: dict, element: dict) -> dict:
     """
-    Fill in Element properties from Context
+    Fill in missing Element properties from context
     """
     element_x = {'id': ''}      # put id first
     element_x.update({k: context[k] for k in DEFAULT_PROPERTIES if k in context})
@@ -98,6 +104,9 @@ def expand_element(context: dict, element: dict) -> dict:
 
 
 def compress_element(context: dict, element_x: dict) -> dict:
+    """
+    Remove Element properties that exist in context
+    """
     element = {k: v for k, v in element_x.items() if v != context.get(k, '')}
     compress_ids(context, element)
     return element
@@ -114,19 +123,21 @@ def read_elements(dirname: str, codec):
     return elements
 
 
-class TransferUnit():
+class SpdxFile():
 
-    def make(self, config_file: str = 'baker-a1.json'):
+    def make(self, config_file: str = 'Config/baker-b1.json'):
         """
         Serialize individual elements into an SPDX file
 
         Config file:
-          * namespace: base IRI for this file
-          * namespaceMap: named IRI prefixes
-          * include: elements to include, including subtree of all referenced elements
+          * namespace: base IRI for this file (rdf BASE)
+          * prefixes: named IRI prefixes (rdf PREFIX)
+          * creationInfo: element containing SPDX file creation info, not necessarily included in file
+          * include: elements to include in SPDX file, including subtree of all referenced elements
           * exclude: don't include specific elements from subtree
+          * filename: SPDX file to create
         """
-        with open(os.path.join(CONFIG_DIR, config_file)) as tf:
+        with open(os.path.join(DATA_DIR,config_file)) as tf:
             config = json.load(tf)
         with open(SCHEMA) as fp:
             schema = jadn.load_any(fp)
@@ -137,12 +148,19 @@ class TransferUnit():
         ex = {e['id']: e for e in elements}
         print(f'{len(elements)} elements read')
 
-        sf = {'namespace': config['namespace']}
-        nm = config.get('namespaceMap')
-        sf.update({'namespaceMap': nm} if nm else {})
+        sfile = {'namespace': config['namespace']}
+        prefixes = config.get('prefixes')
+        sfile.update({'prefixes': prefixes} if prefixes else {})
+        sfile.update({k: ex[config['creationInfo']][k] for k in DEFAULT_PROPERTIES})
+
+        context = {'ids': []}
+        context.update(sfile)
+        elist = config['include']
+        sfile['elementValues'] = [compress_element(context, ex[k]) for k in elist]
+        sfile['createdBy'] = [compress_iri(context, k) for k in context['createdBy']]
 
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
-            json.dump(sf, ofile, indent=2)
+            json.dump(sfile, ofile, indent=2)
 
     def split(self, spdx_file: str):
         """
@@ -158,11 +176,11 @@ class TransferUnit():
           * IRIs that are referenced but not listed in spdfDocumentRefs
           * IRIs without namespace prefixes
           * Duplicates in IRI sets
-          * Root elements
+          * Display root elements
         """
         return
 
 
 if __name__ == '__main__':
     print(f'Installed JADN version: {jadn.__version__}\n')
-    fire.Fire(TransferUnit)
+    fire.Fire(SpdxFile)

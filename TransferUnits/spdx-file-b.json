@@ -1,6 +1,6 @@
 {
   "namespace": "http://sw.baker.org/",
-  "namespaceMap": {"acme": "urn:acme.dev:"},
+  "prefixes": {"acme": "urn:acme.dev:"},
   "createdBy": ["ids/betty"],
   "created": "2022-05-02T09:15:00Z",
   "specVersion": "3.0",
