@@ -1,6 +1,6 @@
 {
-  "id": "http://sw.baker.org/ids/betty",
-  "type": {
+  "@id": "http://sw.baker.org/ids/betty",
+  "@type": {
     "actor": {}
   },
   "createdBy": ["http://sw.baker.org/ids/betty"],

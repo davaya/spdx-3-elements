@@ -1,6 +1,6 @@
 {
-  "id": "urn:spdx.org:licenses:81faf7b:license-list",
-  "type": {
+  "@id": "urn:spdx.org:licenses:81faf7b:license-list",
+  "@type": {
     "spdxDocument": {
       "elements": [
         "urn:spdx.org:licenses:cc-by-nc-nd-3.0",

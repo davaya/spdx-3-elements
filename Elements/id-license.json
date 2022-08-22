@@ -1,6 +1,6 @@
 {
-  "id": "urn:spdx.org:identities:license-authority",
-  "type": {
+  "@id": "urn:spdx.org:identities:license-authority",
+  "@type": {
     "actor": {}
   },
   "createdBy": ["urn:licenses.spdx.org:identities:license-authority"],

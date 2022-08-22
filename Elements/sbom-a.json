@@ -1,6 +1,6 @@
 {
-  "id": "urn:acme.dev:sboms:gnu-coreutils/v9.1",
-  "type": {
+  "@id": "urn:acme.dev:sboms:gnu-coreutils/v9.1",
+  "@type": {
     "sbom": {
       "elements": [
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/du.c",

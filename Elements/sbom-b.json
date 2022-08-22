@@ -1,6 +1,6 @@
 {
-  "id": "http://sw.baker.org/widget-v2.3",
-  "type": {
+  "@id": "http://sw.baker.org/widget-v2.3",
+  "@type": {
     "sbom": {
       "elements": [
         "http://sw.baker.org/pkgs/widget-v2.3",

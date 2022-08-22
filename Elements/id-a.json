@@ -1,6 +1,6 @@
 {
-  "id": "urn:acme.dev:identities:fred",
-  "type": {
+  "@id": "urn:acme.dev:identities:fred",
+  "@type": {
     "actor": {}
   },
   "createdBy": ["urn:acme.dev:identities:fred"],

@@ -1,6 +1,6 @@
 {
-  "id": "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/echo.c",
-  "type": {
+  "@id": "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/echo.c",
+  "@type": {
     "file": {
       "filePurpose": ["APPLICATION", "SOURCE"]
     }

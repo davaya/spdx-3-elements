@@ -1,6 +1,6 @@
 {
-  "id": "urn:acme.dev:relationships:gnu-coreutils/v9.1",
-  "type": {
+  "@id": "urn:acme.dev:relationships:gnu-coreutils/v9.1",
+  "@type": {
     "relationship": {
       "relationshipType": "CONTAINS",
       "from": "urn:acme.dev:artifacts:gnu-coreutils/v9.1",

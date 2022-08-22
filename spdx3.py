@@ -18,7 +18,7 @@ SCHEMA = 'Schemas/spdx-v3.jidl'
 DATA_DIR = 'Elements'
 OUTPUT_DIR = 'Out'
 DEFAULT_PROPERTIES = ('createdBy', 'createdWhen', 'specVersion', 'profiles', 'dataLicense')
-IRI_LOCATIONS = ['id', 'created/by', '*/elements/*', 'relationship/from', 'relationship/to/*',
+IRI_LOCATIONS = ['@id', 'created/by', '*/elements/*', 'relationship/from', 'relationship/to/*',
                  '*/originator', 'elementRefs/id', 'annotation/subject']
 
 
@@ -58,7 +58,7 @@ def expand_ids(context: dict, element: dict, paths: list) -> None:
 
     Hardcode IRI locations for now; replace with path-driven update
     """
-    element.update({'id': expand_iri(context, element['id'])})
+    element.update({'@id': expand_iri(context, element['@id'])})
     if 'createdBy' in element:
         element['createdBy'] = [expand_iri(context, k) for k in element['createdBy']]
     for etype, eprops in element['type'].items():
@@ -79,12 +79,12 @@ def compress_ids(context: dict, element: dict) -> None:
     Add all IRIs in the element to context['ids']
     Hardcode IRI locations for now; replace with path-driven update
     """
-    ids = [element['id']]
-    element.update({'id': compress_iri(context, element['id'])})
+    ids = [element['@id']]
+    element.update({'@id': compress_iri(context, element['@id'])})
     if 'createdBy' in element:
         ids += element['createdBy']
         element['createdBy'] = [compress_iri(context, k) for k in element['createdBy']]
-    for etype, eprops in element['type'].items():
+    for etype, eprops in element['@type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
                 ids += eprops[p]
@@ -93,7 +93,7 @@ def compress_ids(context: dict, element: dict) -> None:
             ids += eprops['subject']
             eprops['subject'] = compress_iri(context, eprops['subject'])
         elif etype == 'relationship':
-            ids += eprops['from'] + eprops['to']
+            ids += [eprops['from']] + eprops['to']
             eprops['from'] = compress_iri(context, eprops['from'])
             eprops['to'] = [compress_iri(context, k) for k in eprops['to']]
     context['ids'] += ids
@@ -103,7 +103,7 @@ def expand_element(context: dict, element: dict) -> dict:
     """
     Fill in missing Element properties from context
     """
-    element_x = {'id': ''}      # put id first
+    element_x = {'@id': ''}      # put id first
     element_x.update({k: context[k] for k in DEFAULT_PROPERTIES if k in context})
     element_x.update(element)
     expand_ids(context, element_x, IRI_LOCATIONS)
@@ -152,7 +152,7 @@ class SpdxFile():
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
         elements = read_elements(DATA_DIR, codec)
-        ex = {e['id']: e for e in elements}
+        ex = {e['@id']: e for e in elements}
         print(f'{len(elements)} elements read')
 
         sfile = {'namespace': config['namespace']}
