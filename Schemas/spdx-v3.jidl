@@ -15,7 +15,7 @@ Payload = Record                                  // Serialized file (or equival
    5 specVersion      SemVer optional             // File creation info and element defaults
    6 profiles         ProfileIdentifier [0..*]    // File creation info and element defaults
    7 dataLicense      LicenseId optional          // File creation info and element defaults
-   8 elements         Element [1..*] unique       // Element values, defined in this file or copied
+   8 elements         Element unique [1..*]       // Element values, defined in this file or copied
    9 spdxDocumentId   Link(Element) optional      // Optional SpdxDocument element that describes this file
   10 spdxDocumentRefs Link(Element) [0..*]        // SpdxDocument elements that describe referenced files
 
