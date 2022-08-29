@@ -9,7 +9,7 @@
         "urn:spdx.org:identities:license-authority",
         "urn:spdx.org:licenses:81faf7b:license-list"
       ],
-      "downloadLocation": "http://spdx.org/license-list/81faf7b.json"
+      "downloadLocation": ["http://spdx.org/license-list/81faf7b.json"]
     }
   },
   "createdBy": ["urn:licenses.spdx.org:identities:license-authority"],
