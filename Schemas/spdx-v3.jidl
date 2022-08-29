@@ -3,7 +3,7 @@
  description: "This information model defines the serialized structure of SPDXv3 logical model types"
      license: "CC0-1.0"
      exports: ["Payload", "Elements"]
-      config: {"$fieldName": "^[a-zA-Z@][_A-Za-z0-9]{0,63}$"}
+      config: {"$FieldName": "^[a-zA-Z@][_A-Za-z0-9]{0,63}$"}
 
 Elements = ArrayOf(Element) unique                // Serialized set of independent Element values
 
@@ -72,9 +72,11 @@ IdentifierType = Choice                           // Identifier Data Type
    1 email            String
    2 externalReference ExternalReference
 
-SpdxDocument = Record                             // Statements about serialized document.  "verifiedUsing" is required.
-   1 elements         Link(Element) [1..*]        // Elements contained in serialized document
-   2 downloadLocation URL optional                // Location of serialized document
+SpdxDocument = Record                             // Statements about a serialized file. "verifiedUsing" is required.
+   1 namespace        IRI optional                // Default namespace for Element ids in the SPDX file (rdf BASE)
+   2 prefixes         NamespaceMap optional       // Namespace abbreviations used in the SPDX file (rdf PREFIX)
+   3 elements         Link(Element) [1..*]        // Element values contained in the SPDX file
+   4 downloadLocation URL [0..*]                  // Unique ID or Location(s) of the SPDX file
 
 BOM = Record
    1 elements         Link(Element) [1..*]        // <-Collection

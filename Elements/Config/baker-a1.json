@@ -4,5 +4,6 @@
   "creationInfo": "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom",
   "include": ["http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom"],
   "exclude": [],
+  "fileRefs": [],
   "filename": "spdx-file-a.json"
 }

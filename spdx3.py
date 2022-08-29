@@ -1,5 +1,5 @@
 """
-Create, split, check or translate an SPDXv3 file (transfer unit)
+Create, merge, split, check or translate an SPDXv3 file (transfer unit)
 
 Directories:
  * Elements - individual SPDXv3 elements
@@ -119,22 +119,31 @@ def compress_element(context: dict, element_x: dict) -> dict:
     return element
 
 
-def read_elements(dirname: str, codec):
+def read_elements(dirname: str, codec: jadn.codec.Codec):
     elements = []
     with os.scandir(dirname) as dir_items:
         for item in dir_items:
             if item.is_file() and os.path.splitext(item.name)[1] == '.json':
-                with open(item.path) as fp:
-                    element = codec.decode('Element', json.load(fp))
-                elements.append(element)
+                elements.append(load_element(item.path, codec))
     return elements
+
+
+def load_element(path: str, codec: jadn.codec.Codec) -> dict:
+    with open(path) as fp:
+        return codec.decode('Element', json.load(fp))
+
+
+def load_codec() -> jadn.codec.Codec:
+    with open(SCHEMA) as fp:
+        schema = jadn.load_any(fp)
+    return jadn.codec.Codec(schema, verbose_rec=True, verbose_str=True)
 
 
 class SpdxFile():
 
     def make(self, config: str):
         """
-        Serialize individual elements into an SPDX file
+        Make an SpdxDocument element that describes a serialized file
 
         CONFIG: JSON file that defines how to generate the SPDX file:
           * namespace: base IRI for this file (rdf BASE)
@@ -142,13 +151,12 @@ class SpdxFile():
           * creationInfo: element containing SPDX file creation info, not necessarily included in file
           * include: elements to include in SPDX file, including subtree of all referenced elements
           * exclude: don't include specific elements from subtree
+          * fileRefs: SpdxDocument elements in spdxFileRefs
           * filename: SPDX file to create
         """
         with open(os.path.join(DATA_DIR, 'Config', config)) as cf:
             config = json.load(cf)
-        with open(SCHEMA) as fp:
-            schema = jadn.load_any(fp)
-        codec = jadn.codec.Codec(schema, verbose_rec=True, verbose_str=True)
+        codec = load_codec()
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
         elements = read_elements(DATA_DIR, codec)
@@ -171,6 +179,16 @@ class SpdxFile():
 
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
             json.dump(sfile, ofile, indent=2)
+
+    def merge(self, doc: str):
+        """
+        Merge a set of independent elements into an SPDX file
+
+        DOC: SPDX Document element that lists the elements in the SPDX file
+        """
+        codec = load_codec()
+        element = load_element(doc, codec)
+
 
     def split(self, spdx_file: str):
         """

@@ -2,6 +2,8 @@
   "@id": "http://sw.baker.org/spdx-files/widget-v2.3",
   "@type": {
     "spdxDocument": {
+      "namespace": "http://sw.baker.org/",
+      "prefixes": {"acme": "urn:acme.dev:"},
       "elements": [
         "http://sw.baker.org/pkgs/widget-v2.3",
         "http://sw.baker.org/ids/betty",

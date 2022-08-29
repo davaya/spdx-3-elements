@@ -4,5 +4,6 @@
   "creationInfo": "http://sw.baker.org/spdx-files/widget-v2.3",
   "include": ["http://sw.baker.org/spdx-files/widget-v2.3"],
   "exclude": [],
+  "fileRefs": ["http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom"],
   "filename": "spdx-file-b.json"
 }

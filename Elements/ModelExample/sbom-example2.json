@@ -1,0 +1,45 @@
+{
+  "creationInfo": {
+    "specVersion": "3.0",
+    "created": "2022-05-02T20:28:00.000Z",
+    "profile": ["core"],
+    "dataLicense": "CC0",
+    "createdBy": "urn:spdx.dev:iamwillbar"
+  },
+  "externalMap": [
+    {"elementId": "urn:spdx.dev:project", "elemmentUrl": "", "verifiedUsing": []},
+    {"elementId": "urn:spdx.dev:doc", "elementURL": "https://spdx.dev/docs/v1.0.json", "verifiedUsing": []}
+  ],
+  "elementValues": [
+    {
+      "@type": "SBOM",
+      "@id": "urn:spdx.dev:null-sbom",
+      "elements": ["urn:spdx.dev:iamwillbar", "urn:spdx.dev:spdx-tools-3.0.1"],
+      "rootElements": ["urn:spdx.dev:spdx-tools-3.0.1"]
+    },
+    {
+      "@type": "Person",
+      "@id": "urn:spdx.dev:iamwillbar",
+      "name": "William Bartholomew",
+      "identifiedBy": [
+        {"type": "EmailAddress", "email": "willbar@microsoft.com"},
+        {"type": "Account", "authority": "github.com", "locator": "iamwillbar"}
+      ]
+    },
+    {
+      "@type": "Package",
+      "@id": "urn:spdx.dev:spdx-tools-3.0.1",
+      "packagePurpose": ["APPLICATION"],
+      "downloadLocation": "https://spdx.dev/downloads/spdx-tools-3.0.1.tgz",
+      "homePage": "https://spdx.dev/tools.3.0",
+      "originator": ["urn:spdx.dev:project"],
+      "identifiedBy": [
+        {"type": "ExternalReference", "externalReferenceType": "purl", "locator": ""},
+        {"type": "ExternalReference", "externalReferenceType": "cpe22", "locator": ""}
+      ],
+      "verifiedUsing": [
+        {"type": "Hash", "hashAlgorithm": "SHA256", "hashValue": "..."}
+      ]
+    }
+  ]
+}
