@@ -159,8 +159,6 @@ class SpdxFile():
         with open(os.path.join(DATA_DIR, 'Config', config)) as cf:
             config = json.load(cf)
         codec = load_codec()
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
-
         elements = read_elements(DATA_DIR, codec)
         ex = {e['id']: e for e in elements}
         print(f'{len(elements)} elements read')
@@ -175,13 +173,14 @@ class SpdxFile():
         elist = config['include']
         while elist:
             sfile['ids'] = []
-            sfile['elements'] = [ex[k]['id'] for k in elist]
-            el = [k for k in sfile['ids'] if k not in elist]
-            elist = el
+            [compress_ids(sfile, ex[k]) for k in elist]        # Find all ids in element
+            sfile['elements'] = sfile['ids']
+            elist = [k for k in sfile['ids'] if k not in elist]
         # sfile['creator'] = [compress_iri(sfile, k) for k in [sfile['creator']]]
         sfile['creator'] = compress_iri(sfile, sfile['creator'])
         del sfile['ids']
 
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
             json.dump(sfile, ofile, indent=2)
 

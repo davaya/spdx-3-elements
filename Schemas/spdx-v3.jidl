@@ -85,7 +85,7 @@ SpdxDocument = Record                             // Statements about a serializ
    1 namespace        IRI optional                // Default namespace for Element ids in the SPDX file (rdf BASE)
    2 prefixes         NamespaceMap optional       // Namespace abbreviations used in the SPDX file (rdf PREFIX)
    3 elements         Link(Element) [1..*]        // Elements contained in the payload
-   4 downloadLocation URL optional                // Unique ID or Location(s) of the payload
+   4 downloadLocation URL optional                // Unique ID or Location of the payload
 
 BOM = Record
    1 elements         Link(Element) [1..*]        // <-Collection

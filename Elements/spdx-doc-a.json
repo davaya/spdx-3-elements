@@ -11,7 +11,7 @@
         "urn:acme.dev:identities:fred",
         "urn:acme.dev:sboms:gnu-coreutils/v9.1"
       ],
-      "downloadLocation": ["http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom.json"]
+      "downloadLocation": "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom.json"
     }
   },
   "creator": "http://sw.baker.org/ids/betty",

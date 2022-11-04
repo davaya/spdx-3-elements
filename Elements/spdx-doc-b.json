@@ -9,7 +9,7 @@
         "http://sw.baker.org/ids/betty",
         "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom"
       ],
-      "downloadLocation": ["http://sw.baker.org/spdx-files/widget-v2.3.json"]
+      "downloadLocation": "http://sw.baker.org/spdx-files/widget-v2.3.json"
     }
   },
   "creator": "http://sw.baker.org/ids/betty",
