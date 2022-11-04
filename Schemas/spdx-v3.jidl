@@ -6,7 +6,7 @@
      exports: ["Payload", "Elements"]
       config: {"$FieldName": "^[a-zA-Z@][_A-Za-z0-9]{0,63}$"}
 
-Elements = ArrayOf(Element) unique                // Serialized set of independent Element values
+Elements = ArrayOf(Element){1..*} unique          // Serialized set of independent Element values
 
 Payload = Record                                  // Serialized file (or equivalent) for transferring Elements
    1 namespace        IRI optional                // Default namespace for Element ids in this file (rdf BASE)
@@ -16,11 +16,11 @@ Payload = Record                                  // Serialized file (or equival
    5 specVersion      SemVer optional             // File creation info and element defaults
    6 profiles         ProfileIdentifier [0..*]    // File creation info and element defaults
    7 dataLicense      LicenseId optional          // File creation info and element defaults
-   8 elements         Element [1..*]              // Element values, defined in this file or copied
-   9 spdxDocumentId   Link(Element) optional      // SpdxDocument Id that describes this file
-  10 spdxDocumentRefs Link(Element) [0..*]        // SpdxDocument Ids that describe referenced files
+   8 elements         Element unique [1..*]       // Element values, defined in this file or copied
+   9 spdxDocumentId   Link(Element) optional      // Optional SpdxDocument element that describes this file
+  10 spdxDocumentRefs Link(Element) [0..*]        // SpdxDocument elements that describe referenced files
 
-NamespaceMap = MapOf(Prefix, IRI)
+NamespaceMap = MapOf(Prefix, IRI){1..*}
 
 Element = Record
    1 id               Key(IRI)                    // Element unique identifier
@@ -153,7 +153,6 @@ SemVer = String{pattern="^(\d{1,4})\.(\d{1,6})$"} // m.n: "3.141592" is valid, "
 SnippetLocation = Record
 
 IRI = String /iri                                 // Element id:  local, prefix:local, or absolute-IRI
-// IRI = String                                      // Python JSON Schema incorrectly rejects URNs
 
 URL = String /uri                                 // IRI, must be a locator
 
@@ -176,7 +175,7 @@ ExternalIdentifierType = Enumerated
    5 SWHID
    6 GITOID
 
-ExternalReferenceType = Enumerated                // Invalid without at least one defined value
+ExternalReferenceType = Enumerated
    0 OTHER
    1 ALT_DOWNLOAD_LOCATION
    2 SECURITY_ADVISORY
