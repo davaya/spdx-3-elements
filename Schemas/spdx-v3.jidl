@@ -1,5 +1,6 @@
        title: "SPDX v3"
      package: "http://spdx.org/spdx/v3/document"
+     version: "spdx-3-model 2022-09-20"
  description: "This information model defines the serialized structure of SPDXv3 logical model types"
      license: "CC0-1.0"
      exports: ["Payload", "Elements"]
@@ -10,22 +11,22 @@ Elements = ArrayOf(Element) unique                // Serialized set of independe
 Payload = Record                                  // Serialized file (or equivalent) for transferring Elements
    1 namespace        IRI optional                // Default namespace for Element ids in this file (rdf BASE)
    2 prefixes         NamespaceMap optional       // Namespace abbreviations used in this file (rdf PREFIX)
-   3 createdBy        Link(Element) [0..*]        // File creation info and element defaults - Link(Actor)
-   4 createdWhen      DateTime optional           // File creation info and element defaults
+   3 creator          Link(Element) optional      // File creation info and element defaults - Link(Actor)
+   4 created          DateTime optional           // File creation info and element defaults
    5 specVersion      SemVer optional             // File creation info and element defaults
    6 profiles         ProfileIdentifier [0..*]    // File creation info and element defaults
    7 dataLicense      LicenseId optional          // File creation info and element defaults
    8 elements         Element [1..*]              // Element values, defined in this file or copied
-   9 spdxDocumentId   Link(Element) optional      // Optional SpdxDocument element that describes this file
-  10 spdxDocumentRefs Link(Element) [0..*]        // SpdxDocument elements that describe referenced files
+   9 spdxDocumentId   Link(Element) optional      // SpdxDocument Id that describes this file
+  10 spdxDocumentRefs Link(Element) [0..*]        // SpdxDocument Ids that describe referenced files
 
 NamespaceMap = MapOf(Prefix, IRI)
 
 Element = Record
-   1 @id              Key(IRI)                    // Element unique identifier. "@" property names do not imply JSON-LD semantics
-   2 @type            ElementType
-   3 createdBy        Link(Element) [0..*]        // required: explicit or default  - Link(Actor)
-   4 createdWhen      DateTime optional           // required: explicit or default
+   1 id               Key(IRI)                    // Element unique identifier
+   2 type             ElementType                 // Element type and type-specific properties
+   3 creator          Link(Element) optional      // required: explicit or default - Link(Actor)
+   4 created          DateTime optional           // required: explicit or default
    5 specVersion      SemVer optional             // required: explicit or default
    6 profiles         ProfileIdentifier [0..*]    // required: explicit or default
    7 dataLicense      LicenseId optional          // required: explicit or default
@@ -33,15 +34,16 @@ Element = Record
    9 summary          String optional
   10 description      String optional
   11 comment          String optional
-  12 verifiedUsing    IntegrityMethod [0..*]
-  13 identifiedBy     IdentifierType [0..*]
-  14 extensions       Extensions optional
+  12 verifiedUsing    IntegrityMethod [0..*]      // Applies only to Artifacts
+  13 externalReferences ExternalReference [0..*]
+  14 externalIdentifiers ExternalIdentifier [0..*]
+  15 extensions       Extensions optional
 
 ElementType = Choice
    1 annotation       Annotation
    2 relationship     Relationship
-   3 identity         IdentityType                // Abstract "Subject"
-   4 actor            Empty
+   3 actor            Actor
+   4 identity         Identity                    // Abstract "Subject"
    5 spdxDocument     SpdxDocument                // <- Collection: A file containing serialized element values
    6 bom              BOM                         // <- Collection
   10 snippet          Snippet                     // <- Artifact: pkg:Software
@@ -49,8 +51,6 @@ ElementType = Choice
   12 package          Package                     // <- Artifact: pkg:Software
   13 sbom             SBOM                        // <- BOM: pkg:Software
   14 license          License                     // pkg:License
-
-Empty = Record
 
 Annotation = Record
    1 annotationType   AnnotationType
@@ -63,20 +63,29 @@ Relationship = Record
    3 to               Link(Element) [1..*]
    4 completeness     RelationshipCompleteness optional
 
-IdentityType = Choice
+Actor = ArrayOf(ActorIdentifier)
+
+ActorIdentifier = Choice
+    1 person          Identifier
+    2 organization    Identifier
+    3 tool            Identifier
+
+Identifier = Choice
+    0 id              String                      // Unspecified identifier kind
+    1 name            String                      // Common name, not unique
+    2 email           Email                       // rfc2822 address syntax, not necessarily active
+    3 uri             String                      // Identifier, not necessarily a resource
+
+Identity = Choice
    1 person           Person
    2 organization     Organization
    3 tool             Tool
 
-IdentifierType = Choice                           // Identifier Data Type
-   1 email            String
-   2 externalReference ExternalReference
-
 SpdxDocument = Record                             // Statements about a serialized file. "verifiedUsing" is required.
    1 namespace        IRI optional                // Default namespace for Element ids in the SPDX file (rdf BASE)
    2 prefixes         NamespaceMap optional       // Namespace abbreviations used in the SPDX file (rdf PREFIX)
-   3 elements         Link(Element) [1..*]        // Element values contained in the SPDX file
-   4 downloadLocation URL [0..*]                  // Unique ID or Location(s) of the SPDX file
+   3 elements         Link(Element) [1..*]        // Elements contained in the payload
+   4 downloadLocation URL optional                // Unique ID or Location(s) of the payload
 
 BOM = Record
    1 elements         Link(Element) [1..*]        // <-Collection
@@ -129,9 +138,11 @@ Hashes = Map{1..*}
 
 PublicKeySignature = Record
 
-Extensions = MapOf(IRI, String)                   // Placeholder to define extension types
+Extensions = MapOf(IRI, String)                   // Extensions are opaque strings
 
 DateTime = String                                 // implement Integer /datetime_ms
+
+Email = String /email
 
 MediaType = String
 
@@ -141,20 +152,40 @@ SemVer = String{pattern="^(\d{1,4})\.(\d{1,6})$"} // m.n: "3.141592" is valid, "
 
 SnippetLocation = Record
 
-IRI = String /uri                                 // Element id:  local, prefix:local, or absolute-IRI
+IRI = String /iri                                 // Element id:  local, prefix:local, or absolute-IRI
+// IRI = String                                      // Python JSON Schema incorrectly rejects URNs
 
 URL = String /uri                                 // IRI, must be a locator
 
-LicenseId = Enumerated                            // From license list: referenceNumber, licenseId  // name
- 451 Apache-2.0                                   // Apache License 2.0
- 457 CC0-1.0                                      // Creative Commons Zero v1.0 Universal
+AnnotationType = Enumerated
+   0 OTHER
+   1 REVIEW
 
 ExternalReference = Record
    1 type             ExternalReferenceType
    2 locator          IRI                         // URL - must be a locator
+   3 contentType      MediaType optional
+   4 comments         String optional
+
+ExternalIdentifierType = Enumerated
+   0 OTHER
+   1 CPE-2.2
+   2 CPE-2.3
+   3 PURL
+   4 SWID
+   5 SWHID
+   6 GITOID
 
 ExternalReferenceType = Enumerated                // Invalid without at least one defined value
-   1 FOO                                          // TBSL
+   0 OTHER
+   1 ALT_DOWNLOAD_LOCATION
+   2 SECURITY_ADVISORY
+   3 SECURITY_FIX
+   4 SECURITY_OTHER
+
+LicenseId = Enumerated                            // From license list: referenceNumber, licenseId  // name
+ 451 Apache-2.0                                   // Apache License 2.0
+ 457 CC0-1.0                                      // Creative Commons Zero v1.0 Universal
 
 ProfileIdentifier = Enumerated                    // Shown as "pkg" on logical model diagram, use upper case names?
    1 Core
@@ -166,74 +197,61 @@ RelationshipCompleteness = Enumerated
    2 INCOMPLETE
    3 UNKNOWN
 
-SoftwarePurpose = Enumerated
-   1 APPLICATION
-   2 FRAMEWORK
-   3 LIBRARY
-   4 CONTAINER
-   5 OPERATING-SYSTEM
-   6 DEVICE
-   7 FIRMWARE
-   8 SOURCE
-   9 PATCH
-  10 ARCHIVE
-  11 CONFIGURATION
-  12 DATA
-  13 DOCUMENTATION
-  14 EXECUTABLE
-  15 MODULE
-  16 BOM
-  99 OTHER
-
-AnnotationType = Enumerated
-   1 REVIEW
-   9 OTHER
-
 RelationshipType = Enumerated
-   0 NONE
+   0 OTHER
    1 DESCRIBES
-   2 DESCRIBED_BY
+   2 AMENDS
    3 CONTAINS
-   4 CONTAINED_BY
-   5 DEPENDS_ON
-   6 DEPENDENCY_OF
-   7 DEPENDENCY_MANIFEST_OF
-   8 BUILD_DEPENDENCY_OF
-   9 DEV_DEPENDENCY_OF
-  10 OPTIONAL_DEPENDENCY_OF
-  11 PROVIDED_DEPENDENCY_OF
-  12 TEST_DEPENDENCY_OF
-  13 RUNTIME_DEPENDENCY_OF
-  14 EXAMPLE_OF
-  15 GENERATES
-  16 GENERATED_FROM
-  17 ANCESTOR_OF
-  18 DESCENDANT_OF
-  19 VARIANT_OF
-  20 DISTRIBUTION_ARTIFACT
-  21 PATCH_FOR
-  22 PATCH_APPLIED
-  23 COPY_OF
-  24 FILE_ADDED
-  25 FILE_DELETED
-  26 FILE_MODIFIED
-  27 EXPANDED_FROM_ARCHIVE
-  28 DYNAMIC_LINK
-  29 STATIC_LINK
-  30 DATA_FILE_OF
-  31 TEST_CASE_OF
-  32 BUILD_TOOL_OF
-  33 DEF_TOOL_OF
-  34 TEST_OF
-  35 TEST_TOOL_OF
-  36 DOCUMENTATION_OF
-  37 OPTIONAL_COMPONENT_OF
-  38 METAFILE_OF
-  39 PACKAGE_OF
-  40 AMENDS
-  41 PREREQUISITE_FOR
-  42 HAS_PREREQUISITE
-  43 SUPPLIED_BY                                  // 3.0
-  44 ALSO_KNOWN_AS                                // 3.0
-  98 NOASSERTION
-  99 OTHER
+   4 ANCESTOR
+   5 DESCENDANT     // Don't need both ANCESTOR and DESCENDANT?
+   6 DEPENDS_ON
+   7 BUILD_DEPENDENCY
+   8 DEV_DEPENDENCY
+   9 OPTIONAL_DEPENDENCY
+  10 PROVIDED_DEPENDENCY
+  11 TEST_DEPENDENCY
+  12 RUNTIME_DEPENDENCY
+  13 DEPENDENCY_MANIFEST
+  14 DYNAMIC_LINK
+  15 STATIC_LINK
+  16 PREREQUISITE
+  17 BUILD_TOOL
+  18 DEV_TOOL
+  19 TEST_TOOL
+  20 GENERATES
+  21 DISTRIBUTION_ARTIFACT
+  22 EXAMPLE
+  23 DATA_FILE
+  24 TEST_CASE
+  25 DOCUMENTATION
+  26 METAFILE
+  27 TEST
+  28 OPTIONAL_COMPONENT
+  29 PACKAGES
+  30 PATCH
+  31 COPY
+  32 EXPANDED_FROM_ARCHIVE
+  33 FILE_ADDED
+  34 FILE_DELETED
+  35 FILE_MODIFIED
+  36 SUPPLIED_BY                                  // 3.0
+
+SoftwarePurpose = Enumerated
+   0 OTHER
+   1 APPLICATION
+   2 ARCHIVE
+   3 BOM
+   4 CONFIGURATION
+   5 CONTAINER
+   6 DATA
+   7 DEVICE
+   8 DOCUMENTATION
+   9 EXECUTABLE
+  10 FILE
+  11 FRAMEWORK
+  12 INSTALL
+  13 LIBRARY
+  14 MODULE
+  15 OPERATING-SYSTEM
+  16 PATCH
+  17 SOURCE

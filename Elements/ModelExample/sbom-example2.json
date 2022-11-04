@@ -4,7 +4,7 @@
     "created": "2022-05-02T20:28:00.000Z",
     "profile": ["core"],
     "dataLicense": "CC0",
-    "createdBy": "urn:spdx.dev:iamwillbar"
+    "creator": "urn:spdx.dev:iamwillbar"
   },
   "externalMap": [
     {"elementId": "urn:spdx.dev:project", "elemmentUrl": "", "verifiedUsing": []},

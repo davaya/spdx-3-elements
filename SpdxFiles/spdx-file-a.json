@@ -1,30 +1,30 @@
 {
   "namespace": "urn:acme.dev:",
-  "createdBy": ["identities:fred"],
+  "creator": ["identities:fred"],
   "created": "2022-04-05T22:00:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "Software"],
   "dataLicense": "CC0-1.0",
   "elementValues": [
     {
-      "@id": "artifacts:gnu-coreutils/v9.1/src/du.c",
-      "@type": {
+      "id": "artifacts:gnu-coreutils/v9.1/src/du.c",
+      "type": {
         "file": {
           "filePurpose": ["APPLICATION", "SOURCE"]
         }
       }
     },
     {
-      "@id": "artifacts:gnu-coreutils/v9.1/src/echo.c",
-      "@type": {
+      "id": "artifacts:gnu-coreutils/v9.1/src/echo.c",
+      "type": {
         "file": {
           "filePurpose": ["APPLICATION", "SOURCE"]
         }
       }
     },
     {
-      "@id": "artifacts:gnu-coreutils/v9.1",
-      "@type": {
+      "id": "artifacts:gnu-coreutils/v9.1",
+      "type": {
         "package": {
           "packagePurpose": ["APPLICATION", "SOURCE"],
           "downloadLocation": "http://mirror.rit.edu/gnu/coreutils/coreutils-9.1.tar.gz",
@@ -34,8 +34,8 @@
       "name": "GNU Coreutils"
     },
     {
-      "@id": "relationships:gnu-coreutils/v9.1",
-      "@type": {
+      "id": "relationships:gnu-coreutils/v9.1",
+      "type": {
         "relationship": {
           "relationshipType": "CONTAINS",
           "from": "urn:acme.dev:artifacts:gnu-coreutils/v9.1",
@@ -47,15 +47,15 @@
       }
     },
     {
-      "@id": "identities:fred",
-      "@type": {
+      "id": "identities:fred",
+      "type": {
         "actor": {}
       },
       "identifiedBy": [{"email": "fred@acme.com"}]
     },
     {
-      "@id": "sboms:gnu-coreutils/v9.1",
-      "@type": {
+      "id": "sboms:gnu-coreutils/v9.1",
+      "type": {
         "sbom": {
           "elements": [
             "artifacts:gnu-coreutils/v9.1/src/du.c",

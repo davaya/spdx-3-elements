@@ -1,6 +1,6 @@
 {
-  "@id": "urn:spdx.org:licenses:81faf7b:license-list",
-  "@type": {
+  "id": "urn:spdx.org:licenses:81faf7b:license-list",
+  "type": {
     "spdxDocument": {
       "namespace": "urn:spdx.org:licenses:",
       "elements": [
@@ -12,8 +12,8 @@
       "downloadLocation": "http://spdx.org/license-list/81faf7b.json"
     }
   },
-  "createdBy": ["urn:licenses.spdx.org:identities:license-authority"],
-  "createdWhen": "2022-04-02T11:00:00Z",
+  "creator": "urn:licenses.spdx.org:identities:license-authority",
+  "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "License"],
   "dataLicense": "CC0-1.0"

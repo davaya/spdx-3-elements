@@ -1,15 +1,15 @@
 {
   "namespace": "http://sw.baker.org/",
   "prefixes": {"acme": "urn:acme.dev:"},
-  "createdBy": ["ids/betty"],
+  "creator": ["ids/betty"],
   "created": "2022-05-02T09:15:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "Software"],
   "dataLicense": "CC0-1.0",
   "elementValues": [
     {
-      "@id": "pkgs/widget-v2.3",
-      "@type": {
+      "id": "pkgs/widget-v2.3",
+      "type": {
         "package": {
           "packagePurpose": ["APPLICATION", "SOURCE"],
           "downloadLocation": "https://sw.baker.org/pkgs/widget-v2.3.zip",
@@ -18,15 +18,15 @@
       }
     },
     {
-      "@id": "ids/betty",
-      "@type": {
+      "id": "ids/betty",
+      "type": {
         "actor": {}
       },
       "identifiedBy": [{"email": "betty@baker.org"}]
     },
     {
-      "@id": "widget-v2.3",
-      "@type": {
+      "id": "widget-v2.3",
+      "type": {
         "sbom": {
           "elements": [
             "pkgs/widget-v2.3",
@@ -38,8 +38,8 @@
       }
     },
     {
-      "@id": "docs/acme-docs/gnu-coreutils-sbom.json",
-      "@type": {
+      "id": "docs/acme-docs/gnu-coreutils-sbom.json",
+      "type": {
         "spdxDocument": {
           "elements": [
             "acme:artifacts:gnu-coreutils/v9.1/src/du.c",

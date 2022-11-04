@@ -1,6 +1,6 @@
 {
-  "@id": "http://sw.baker.org/spdx-files/widget-v2.3",
-  "@type": {
+  "id": "http://sw.baker.org/spdx-files/widget-v2.3",
+  "type": {
     "spdxDocument": {
       "elements": [
         "http://sw.baker.org/pkgs/widget-v2.3",
@@ -10,8 +10,8 @@
       "downloadLocation": "http://sw.baker.org/spdx-files/widget-v2.3.json"
     }
   },
-  "createdBy": ["http://sw.baker.org/ids/betty"],
-  "createdWhen": "2022-05-02T09:15:00Z",
+  "creator": "http://sw.baker.org/ids/betty",
+  "created": "2022-05-02T09:15:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "Software"],
   "dataLicense": "CC0-1.0"

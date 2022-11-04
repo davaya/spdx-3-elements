@@ -1,6 +1,6 @@
 {
-  "@id": "urn:spdx.org:licenses:cc-by-nc-nd-3.0",
-  "@type": {
+  "id": "urn:spdx.org:licenses:cc-by-nc-nd-3.0",
+  "type": {
     "license": {
       "licenseId": "CC-BY-NC-ND-3.0",
       "source": [
@@ -13,8 +13,8 @@
       "detailsUrl": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.json"
     }
   },
-  "createdBy": ["urn:licenses.spdx.org:identities:license-authority"],
-  "createdWhen": "2022-04-02T11:00:00Z",
+  "creator": "urn:licenses.spdx.org:identities:license-authority",
+  "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "License"],
   "dataLicense": "CC0-1.0",

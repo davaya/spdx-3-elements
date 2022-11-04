@@ -1,14 +1,15 @@
 {
-  "@id": "urn:spdx.org:identities:license-authority",
-  "@type": {
-    "actor": {}
+  "id": "urn:spdx.org:identities:license-authority",
+  "type": {
+    "actor": [{
+      "organization": {
+        "email": "license-authority@spdx.org"
+      }
+    }]
   },
-  "createdBy": ["urn:licenses.spdx.org:identities:license-authority"],
-  "createdWhen": "2022-04-02T11:00:00Z",
+  "creator": "urn:licenses.spdx.org:identities:license-authority",
+  "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "License"],
-  "dataLicense": "CC0-1.0",
-  "identifiedBy": [
-    {"email": "license-authority@spdx.org"}
-  ]
+  "dataLicense": "CC0-1.0"
 }

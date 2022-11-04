@@ -1,14 +1,14 @@
 {
   "namespace": "urn:spdx.org:licenses:",
-  "createdBy": ["urn:spdx.org:identities:license-authority"],
+  "creator": ["urn:spdx.org:identities:license-authority"],
   "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "License"],
   "dataLicense": "CC0-1.0",
   "elementValues": [
     {
-      "@id": "cc-by-nc-nd-3.0",
-      "@type": {
+      "id": "cc-by-nc-nd-3.0",
+      "type": {
         "license": {
           "licenseId": "CC-BY-NC-ND-3.0",
           "source": [
@@ -24,8 +24,8 @@
       "name": "Creative Commons Attribution Non Commercial No Derivatives 3.0 Unported"
     },
     {
-      "@id": "apache-2.0",
-      "@type": {
+      "id": "apache-2.0",
+      "type": {
         "license": {
           "licenseId": "Apache-2.0",
           "source": [
@@ -42,8 +42,8 @@
       "name": "Apache License 2.0"
     },
     {
-      "@id": "urn:spdx.org:identities:license-authority",
-      "@type": {
+      "id": "urn:spdx.org:identities:license-authority",
+      "type": {
         "actor": {}
       },
       "identifiedBy": [
@@ -51,8 +51,8 @@
       ]
     },
     {
-      "@id": "license-list",
-      "@type": {
+      "id": "license-list",
+      "type": {
         "spdxDocument": {
           "elements": [
             "cc-by-nc-nd-3.0",

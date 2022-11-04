@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 SCHEMA = 'Schemas/spdx-v3.jidl'
 DATA_DIR = 'Elements'
 OUTPUT_DIR = 'Out'
-DEFAULT_PROPERTIES = ('createdBy', 'createdWhen', 'specVersion', 'profiles', 'dataLicense')
+DEFAULT_PROPERTIES = ('creator', 'created', 'specVersion', 'profiles', 'dataLicense')
 IRI_LOCATIONS = ['@id', 'created/by', '*/elements/*', 'relationship/from', 'relationship/to/*',
                  '*/originator', 'elementRefs/id', 'annotation/subject']
 
@@ -59,8 +59,9 @@ def expand_ids(context: dict, element: dict, paths: list) -> None:
     Hardcode IRI locations for now; replace with path-driven update
     """
     element.update({'@id': expand_iri(context, element['@id'])})
-    if 'createdBy' in element:
-        element['createdBy'] = [expand_iri(context, k) for k in element['createdBy']]
+    if 'creator' in element:
+        # element['creator'] = [expand_iri(context, k) for k in [element['creator']]]
+        element['creator'] = expand_iri(context, element['creator'])
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
@@ -79,12 +80,13 @@ def compress_ids(context: dict, element: dict) -> None:
     Add all IRIs in the element to context['ids']
     Hardcode IRI locations for now; replace with path-driven update
     """
-    ids = [element['@id']]
-    element.update({'@id': compress_iri(context, element['@id'])})
-    if 'createdBy' in element:
-        ids += element['createdBy']
-        element['createdBy'] = [compress_iri(context, k) for k in element['createdBy']]
-    for etype, eprops in element['@type'].items():
+    ids = [element['id']]
+    element.update({'id': compress_iri(context, element['id'])})
+    if 'creator' in element:
+        ids += [element['creator']]
+        # element['creator'] = [compress_iri(context, k) for k in [element['creator']]]
+        element['creator'] = compress_iri(context, element['creator'])
+    for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
                 ids += eprops[p]
@@ -145,7 +147,7 @@ class SpdxFile():
         """
         Make an SpdxDocument element that describes a serialized file
 
-        CONFIG: JSON file that defines how to generate the SPDX file:
+        CONFIG: JSON file that defines how to generate the SpdxDocument element:
           * namespace: base IRI for this file (rdf BASE)
           * prefixes: named IRI prefixes (rdf PREFIX)
           * creationInfo: element containing SPDX file creation info, not necessarily included in file
@@ -160,21 +162,24 @@ class SpdxFile():
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
         elements = read_elements(DATA_DIR, codec)
-        ex = {e['@id']: e for e in elements}
+        ex = {e['id']: e for e in elements}
         print(f'{len(elements)} elements read')
+        ed = ex[config['creationInfo']]
+        print(f'{ed["id"]}: Default creator {ed["creator"]} {ed["created"]}')
 
         sfile = {'namespace': config['namespace']}
         prefixes = config.get('prefixes')
         sfile.update({'prefixes': prefixes} if prefixes else {})
-        sfile.update({k: ex[config['creationInfo']][k] for k in DEFAULT_PROPERTIES})
+        sfile.update({k: ed[k] for k in DEFAULT_PROPERTIES})
 
         elist = config['include']
         while elist:
             sfile['ids'] = []
-            sfile['elementValues'] = [compress_element(sfile, ex[k]) for k in elist]
+            sfile['elements'] = [ex[k]['id'] for k in elist]
             el = [k for k in sfile['ids'] if k not in elist]
             elist = el
-        sfile['createdBy'] = [compress_iri(sfile, k) for k in sfile['createdBy']]
+        # sfile['creator'] = [compress_iri(sfile, k) for k in [sfile['creator']]]
+        sfile['creator'] = compress_iri(sfile, sfile['creator'])
         del sfile['ids']
 
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
@@ -182,13 +187,12 @@ class SpdxFile():
 
     def merge(self, doc: str):
         """
-        Merge a set of independent elements into an SPDX file
+        Merge a set of independent elements into an SPDX file (payload)
 
-        DOC: SPDX Document element that lists the elements in the SPDX file
+        DOC: SpdxDocument element that lists the elements to include in the SPDX file
         """
         codec = load_codec()
         element = load_element(doc, codec)
-
 
     def split(self, spdx_file: str):
         """
