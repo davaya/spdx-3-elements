@@ -12,7 +12,9 @@
       "downloadLocation": "http://spdx.org/license-list/81faf7b.json"
     }
   },
-  "creator": "urn:licenses.spdx.org:identities:license-authority",
+  "creator": [
+    {"organization": {"email": "license-authority@spdx.org"}}
+  ],
   "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
   "profiles": ["Core", "License"],

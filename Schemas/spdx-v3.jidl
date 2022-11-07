@@ -25,7 +25,7 @@ NamespaceMap = MapOf(Prefix, IRI){1..*}
 Element = Record
    1 id               Key(IRI)                    // Element unique identifier
    2 type             ElementType                 // Element type and type-specific properties
-   3 creator          Link(Element) optional      // required: explicit or default - Link(Actor)
+   3 creator          Actor [1..*]                // required: explicit or default
    4 created          DateTime optional           // required: explicit or default
    5 specVersion      SemVer optional             // required: explicit or default
    6 profiles         ProfileIdentifier [0..*]    // required: explicit or default
@@ -42,13 +42,14 @@ Element = Record
 ElementType = Choice
    1 annotation       Annotation
    2 relationship     Relationship
-   3 actor            Actor
-   4 identity         Identity                    // Abstract "Subject"
-   5 spdxDocument     SpdxDocument                // <- Collection: A file containing serialized element values
-   6 bom              BOM                         // <- Collection
-  10 snippet          Snippet                     // <- Artifact: pkg:Software
+   3 person           Person                      // <- Identity
+   4 organization     Organization                // <- Identity
+   5 tool             Tool                        // <- Identity
+   6 spdxDocument     SpdxDocument                // <- Collection: A file containing serialized element values
+   7 bom              BOM                         // <- Collection
+  10 package          Package                     // <- Artifact: pkg:Software
   11 file             File                        // <- Artifact: pkg:Software
-  12 package          Package                     // <- Artifact: pkg:Software
+  12 snippet          Snippet                     // <- Artifact: pkg:Software
   13 sbom             SBOM                        // <- BOM: pkg:Software
   14 license          License                     // pkg:License
 
@@ -63,23 +64,12 @@ Relationship = Record
    3 to               Link(Element) [1..*]
    4 completeness     RelationshipCompleteness optional
 
-Actor = ArrayOf(ActorIdentifier)
+Person = Record                                   // Need identity attributes
 
-ActorIdentifier = Choice
-    1 person          Identifier
-    2 organization    Identifier
-    3 tool            Identifier
+Organization = Record                             // Need identity attributes
 
-Identifier = Choice
-    0 id              String                      // Unspecified identifier kind
-    1 name            String                      // Common name, not unique
-    2 email           Email                       // rfc2822 address syntax, not necessarily active
-    3 uri             String                      // Identifier, not necessarily a resource
-
-Identity = Choice
-   1 person           Person
-   2 organization     Organization
-   3 tool             Tool
+Tool = Record                                     // Need identity attributes
+   1 userAgent        String
 
 SpdxDocument = Record                             // Statements about a serialized file. "verifiedUsing" is required.
    1 namespace        IRI optional                // Default namespace for Element ids in the SPDX file (rdf BASE)
@@ -120,12 +110,15 @@ License = Record
    6 reference        URL optional
    7 detailsUrl       URL optional
 
-Person = Record
+Actor = Choice
+    1 person          Identifier
+    2 organization    Identifier
+    3 tool            Identifier
 
-Organization = Record
-
-Tool = Record
-   1 userAgent        String
+Identifier = Choice
+    1 name            String                      // Unspecified Common name, not unique
+    2 email           Email                       // rfc2822 address syntax, not necessarily active
+    3 uri             String                      // Identifier, not necessarily a locator
 
 IntegrityMethod = Choice
    1 hashes           Hashes

@@ -59,9 +59,9 @@ def expand_ids(context: dict, element: dict, paths: list) -> None:
     Hardcode IRI locations for now; replace with path-driven update
     """
     element.update({'@id': expand_iri(context, element['@id'])})
-    if 'creator' in element:
+    # if 'creator' in element:
         # element['creator'] = [expand_iri(context, k) for k in [element['creator']]]
-        element['creator'] = expand_iri(context, element['creator'])
+        # element['creator'] = expand_iri(context, element['creator'])
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
@@ -82,10 +82,10 @@ def compress_ids(context: dict, element: dict) -> None:
     """
     ids = [element['id']]
     element.update({'id': compress_iri(context, element['id'])})
-    if 'creator' in element:
-        ids += [element['creator']]
+    # if 'creator' in element:
+        # ids += [element['creator']]
         # element['creator'] = [compress_iri(context, k) for k in [element['creator']]]
-        element['creator'] = compress_iri(context, element['creator'])
+        # element['creator'] = compress_iri(context, element['creator'])
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
@@ -177,7 +177,7 @@ class SpdxFile():
             sfile['elements'] = sfile['ids']
             elist = [k for k in sfile['ids'] if k not in elist]
         # sfile['creator'] = [compress_iri(sfile, k) for k in [sfile['creator']]]
-        sfile['creator'] = compress_iri(sfile, sfile['creator'])
+        # sfile['creator'] = compress_iri(sfile, sfile['creator'])
         del sfile['ids']
 
         os.makedirs(OUTPUT_DIR, exist_ok=True)
