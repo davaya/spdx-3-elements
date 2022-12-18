@@ -2,7 +2,7 @@
   "id": "urn:acme.dev:artifacts:gnu-coreutils/v9.1",
   "type": {
     "package": {
-      "packagePurpose": ["APPLICATION", "SOURCE"],
+      "packagePurpose": ["application", "source"],
       "downloadLocation": "http://mirror.rit.edu/gnu/coreutils/coreutils-9.1.tar.gz",
       "homePage": "https://www.gnu.org/software/coreutils/"
     }
@@ -11,6 +11,6 @@
   "creator": ["urn:acme.dev:identities:fred"],
   "created": "2022-04-05T22:00:00Z",
   "specVersion": "3.0",
-  "profile": ["Core", "Software"],
+  "profile": ["core", "software"],
   "dataLicense": "CC0-1.0"
 }

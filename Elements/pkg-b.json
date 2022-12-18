@@ -2,7 +2,7 @@
   "id": "http://sw.baker.org/pkgs/widget-v2.3",
   "type": {
     "package": {
-      "packagePurpose": ["APPLICATION", "SOURCE"],
+      "packagePurpose": ["application", "source"],
       "downloadLocation": "http://sw.baker.org/pkgs/widget-v2.3.zip",
       "homePage": "https://www.baker.org"
     }
@@ -10,6 +10,6 @@
   "creator": ["http://sw.baker.org/ids/betty"],
   "created": "2022-05-02T09:15:00Z",
   "specVersion": "3.0",
-  "profile": ["Core"],
+  "profile": ["core"],
   "dataLicense": "CC0-1.0"
 }

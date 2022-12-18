@@ -59,9 +59,8 @@ def expand_ids(context: dict, element: dict, paths: list) -> None:
     Hardcode IRI locations for now; replace with path-driven update
     """
     element.update({'@id': expand_iri(context, element['@id'])})
-    # if 'creator' in element:
-        # element['creator'] = [expand_iri(context, k) for k in [element['creator']]]
-        # element['creator'] = expand_iri(context, element['creator'])
+    if 'creator' in element:
+        element['creator'] = [expand_iri(context, k) for k in [element['creator']]]
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
@@ -204,7 +203,7 @@ class SpdxFile():
         ex = {e['id']: e for e in elements}
         used = set()
         docs = [doc] if doc else [d for d in ex if list(ex[d]['type'].keys())[0] == 'spdxDocument']
-        print(f'{len(docs)} documents, {len(elements)} elements')
+        print(f'\n{len(docs)} documents, {len(elements)} elements')
         for n, dx in enumerate(docs, start=1):
             d = ex[dx]['type']['spdxDocument']
             print(f"{n:3}: {len(d['elements']):>3} elements, {len(d.get('documentRefs', []))} refs, {dx}")

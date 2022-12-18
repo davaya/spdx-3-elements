@@ -8,6 +8,6 @@
   "creator": ["urn:acme.dev:identities:fred"],
   "created": "2022-04-05T22:00:00Z",
   "specVersion": "3.0",
-  "profile": ["Core"],
+  "profile": ["core"],
   "dataLicense": "CC0-1.0"
 }

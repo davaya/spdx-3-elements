@@ -80,8 +80,9 @@ SpdxDocument = Record                             // Statements about a serializ
    1 namespace        IRI optional                // Default namespace for Element ids in the SPDX file (rdf BASE)
    2 prefixes         NamespaceMap optional       // Namespace abbreviations used in the SPDX file (rdf PREFIX)
    3 elements         Link(Element) [1..*]        // Elements contained in the payload
-   4 documentRefs     Link(Element) [0..*]        // Documents containing elements referenced by the payload
+   4 documentRefs     Link(Element) [0..*]        // SpdxDocuments containing elements referenced by the payload
    5 downloadLocation URL optional                // Unique ID or Location of the payload
+   6 import           ExternalMap [0..*]          // IRI assignment to non-element hashable data entities
 
 Bom = Record
    1 elements         Link(Element) [1..*]        // <-Collection
@@ -121,7 +122,7 @@ Identifier = Choice
     2 account         Account
 
 IntegrityMethod = Choice
-   1 hashes           Hashes
+   1 hash             Hashes
    2 signature        PublicKeySignature          // A public key by itself is not a checksum
 
 Hashes = Map{1..*}
@@ -162,6 +163,11 @@ ExternalIdentifier = Record
    2 identifier       String
    3 comment          String optional
 
+ExternalMap = Record
+   1 externalId       IRI
+   2 verifiedUsing    IntegrityMethod
+   3 locationHint     URL optional
+
 ExternalReference = Record
    1 type             ExternalReferenceType
    2 locator          IRI                         // URL - must be a locator
@@ -178,81 +184,75 @@ ExternalIdentifierType = Enumerated
    6 gitoid
 
 ExternalReferenceType = Enumerated
-   0 OTHER
-   1 ALT_DOWNLOAD_LOCATION
-   2 SECURITY_ADVISORY
-   3 SECURITY_FIX
-   4 SECURITY_OTHER
+   0 other
+   1 altDownloadLocation
+   2 altWebPage
+   3 securityAdvisory
+   4 securityFix
+   5 securityOther
 
 LicenseId = Enumerated                            // From license list: referenceNumber, licenseId  // name
  451 Apache-2.0                                   // Apache License 2.0
  457 CC0-1.0                                      // Creative Commons Zero v1.0 Universal
 
 ProfileIdentifier = Enumerated                    // Shown as "pkg" on logical model diagram, use upper case names?
-   1 Core
-   2 Software
-   3 License                                      // TBSL
+   1 core
+   2 software
+   3 license                                      // TBSL
 
 RelationshipCompleteness = Enumerated
-   1 KNOWN
-   2 INCOMPLETE
-   3 UNKNOWN
+   1 complete
+   2 incomplete
+   3 noAssertion
 
 RelationshipType = Enumerated
-   0 OTHER
-   1 DESCRIBES
-   2 AMENDS
-   3 CONTAINS
-   4 ANCESTOR
-   5 DESCENDANT     // Don't need both ANCESTOR and DESCENDANT?
-   6 DEPENDS_ON
-   7 BUILD_DEPENDENCY
-   8 DEV_DEPENDENCY
-   9 OPTIONAL_DEPENDENCY
-  10 PROVIDED_DEPENDENCY
-  11 TEST_DEPENDENCY
-  12 RUNTIME_DEPENDENCY
-  13 DEPENDENCY_MANIFEST
-  14 DYNAMIC_LINK
-  15 STATIC_LINK
-  16 PREREQUISITE
-  17 BUILD_TOOL
-  18 DEV_TOOL
-  19 TEST_TOOL
-  20 GENERATES
-  21 DISTRIBUTION_ARTIFACT
-  22 EXAMPLE
-  23 DATA_FILE
-  24 TEST_CASE
-  25 DOCUMENTATION
-  26 METAFILE
-  27 TEST
-  28 OPTIONAL_COMPONENT
-  29 PACKAGES
-  30 PATCH
-  31 COPY
-  32 EXPANDED_FROM_ARCHIVE
-  33 FILE_ADDED
-  34 FILE_DELETED
-  35 FILE_MODIFIED
-  36 SUPPLIED_BY                                  // 3.0
+   0 other
+   1 describes
+   2 amends
+   3 contains
+   4 ancestor           // Need both?
+   5 descendent         // Need both?
+   6 variant            // *
+   7 dependsOn
+  13 dependencyManifest
+  17 buildTool
+  18 devTool
+  19 testTool
+  20 generates
+  21 distributionArtifact
+  22 example
+  23 dataFile
+  24 testCase
+  25 documentation
+  26 metafile
+  27 test
+  28 optionalComponent
+  29 packages
+  30 patch
+  31 copy           //* May or may not be directional?
+  32 expandedFromArchive
+  33 fileAdded
+  34 fileDeleted
+  35 fileModified
+  36 suppliedBy                                  // New in 3.0
 
 SoftwarePurpose = Enumerated
-   0 OTHER
-   1 APPLICATION
-   2 ARCHIVE
-   3 BOM
-   4 CONFIGURATION
-   5 CONTAINER
-   6 DATA
-   7 DEVICE
-   8 DOCUMENTATION
-   9 EXECUTABLE
-  10 FILE
-  11 FRAMEWORK
-  12 INSTALL
-  13 LIBRARY
-  14 MODULE
-  15 OPERATING-SYSTEM
-  16 PATCH
-  17 SOURCE
+   0 other
+   1 application
+   2 archive
+   3 bom
+   4 configuration
+   5 container
+   6 data
+   7 device
+   8 documentation
+   9 executable
+  10 file
+  11 firmware
+  12 framework
+  13 install
+  14 library
+  15 module
+  16 operatingSystem
+  17 patch
+  18 source

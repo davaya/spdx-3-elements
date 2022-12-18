@@ -2,7 +2,7 @@
   "id": "urn:acme.dev:relationships:gnu-coreutils/v9.1",
   "type": {
     "relationship": {
-      "relationshipType": "CONTAINS",
+      "relationshipType": "contains",
       "from": "urn:acme.dev:artifacts:gnu-coreutils/v9.1",
       "to": [
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/du.c",
@@ -13,6 +13,6 @@
   "creator": ["urn:acme.dev:identities:fred"],
   "created": "2022-04-05T22:00:00Z",
   "specVersion": "3.0",
-  "profile": ["Core"],
+  "profile": ["core"],
   "dataLicense": "CC0-1.0"
 }

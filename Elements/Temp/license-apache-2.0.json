@@ -18,6 +18,6 @@
   "creator": ["urn:spdx.org:identities:license-authority"],
   "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
-  "profile": ["Core", "License"],
+  "profile": ["core", "license"],
   "dataLicense": "CC0-1.0"
 }

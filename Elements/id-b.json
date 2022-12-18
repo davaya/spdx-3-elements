@@ -8,6 +8,6 @@
   "creator": ["http://sw.baker.org/ids/betty"],
   "created": "2022-05-02T09:15:00Z",
   "specVersion": "3.0",
-  "profile": ["Core"],
+  "profile": ["core"],
   "dataLicense": "CC0-1.0"
 }

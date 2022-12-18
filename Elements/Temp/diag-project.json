@@ -10,6 +10,6 @@
   "created": "2022-04-02T10:28:00.000Z",
   "creator": ["urn:spdx.dev:iamwillbar"],
   "specVersion": "3.0",
-  "profile": ["Core"],
+  "profile": ["core"],
   "dataLicense": "CC0-1.0"
 }

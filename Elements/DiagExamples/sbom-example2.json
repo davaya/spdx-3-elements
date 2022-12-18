@@ -29,7 +29,7 @@
     {
       "@type": "Package",
       "@id": "urn:spdx.dev:spdx-tools-3.0.1",
-      "packagePurpose": ["APPLICATION"],
+      "packagePurpose": ["application"],
       "downloadLocation": "https://spdx.dev/downloads/spdx-tools-3.0.1.tgz",
       "homePage": "https://spdx.dev/tools.3.0",
       "originator": ["urn:spdx.dev:project"],
