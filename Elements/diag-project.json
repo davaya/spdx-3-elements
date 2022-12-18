@@ -1,0 +1,15 @@
+{
+  "id": "urn:spdx.dev:project",
+  "type": {
+    "annotation": {
+      "annotationType": "review",
+      "subject": "urn:spdx.dev:project"
+    }
+  },
+  "description": "dummy self-referencing element needed for unspecified 'project' example",
+  "created": "2022-04-02T10:28:00.000Z",
+  "creator": ["urn:spdx.dev:iamwillbar"],
+  "specVersion": "3.0",
+  "profile": ["Core"],
+  "dataLicense": "CC0-1.0"
+}

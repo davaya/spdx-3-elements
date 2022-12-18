@@ -6,17 +6,14 @@
       "elements": [
         "urn:spdx.org:licenses:cc-by-nc-nd-3.0",
         "urn:spdx.org:licenses:apache-2.0",
-        "urn:spdx.org:identities:license-authority",
         "urn:spdx.org:licenses:81faf7b:license-list"
       ],
       "downloadLocation": "http://spdx.org/license-list/81faf7b.json"
     }
   },
-  "creator": [
-    {"organization": {"email": "license-authority@spdx.org"}}
-  ],
+  "creator": ["urn:spdx.org:identities:license-authority"],
   "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
-  "profiles": ["Core", "License"],
+  "profile": ["Core", "License"],
   "dataLicense": "CC0-1.0"
 }

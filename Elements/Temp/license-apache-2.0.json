@@ -14,12 +14,10 @@
       "detailsUrl": "https://spdx.org/licenses/Apache-2.0.json"
     }
   },
-  "creator": [
-    {"organization": {"email": "license-authority@spdx.org"}}
-  ],
+  "name": "Apache License 2.0",
+  "creator": ["urn:spdx.org:identities:license-authority"],
   "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
-  "profiles": ["Core", "License"],
-  "dataLicense": "CC0-1.0",
-  "name": "Apache License 2.0"
+  "profile": ["Core", "License"],
+  "dataLicense": "CC0-1.0"
 }

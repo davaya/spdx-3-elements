@@ -1,22 +1,19 @@
 {
-  "id": "http://sw.baker.org/spdx-files/widget-v2.3",
+  "id": "http://sw.baker.org/spdxdocs/widget-v2.3",
   "type": {
     "spdxDocument": {
       "namespace": "http://sw.baker.org/",
       "prefixes": {"acme": "urn:acme.dev:"},
       "elements": [
-        "http://sw.baker.org/pkgs/widget-v2.3",
-        "http://sw.baker.org/ids/betty",
-        "http://sw.baker.org/spdx-files/acme/gnu-coreutils-sbom"
+        "http://sw.baker.org/pkgs/widget-v2.3"
       ],
-      "downloadLocation": "http://sw.baker.org/spdx-files/widget-v2.3.json"
+      "downloadLocation": "http://sw.baker.org/spdx-files/widget-v2.3.json",
+      "documentRefs": ["urn:acme.dev/spdxdocs/acme/gnu-coreutils-sbom"]
     }
   },
-  "creator": [
-    {"person": {"email": "betty@baker.org"}}
-  ],
+  "creator": ["http://sw.baker.org/ids/betty"],
   "created": "2022-05-02T09:15:00Z",
   "specVersion": "3.0",
-  "profiles": ["Core", "Software"],
+  "profile": ["Core", "Software"],
   "dataLicense": "CC0-1.0"
 }

@@ -1,0 +1,69 @@
+{
+  "namespace": "urn:spdx.dev:",
+  "created": "2022-04-02T10:28:00.000Z",
+  "creator": ["urn:spdx.dev:iamwillbar"],
+  "specVersion": "3.0",
+  "profile": ["Core"],
+  "dataLicense": "CC0-1.0",
+  "elements": [
+    {
+      "id": "urn:spdx.dev:iamwillbar",
+      "type": {
+        "person": {
+          "identifiedBy": [
+            {"email": "willbar@microsoft.com"},
+            {"account": {"authority": "github.com", "localId": "iamwillbar"}}
+          ]
+        }
+      },
+      "created": "2022-04-02T10:28:00.000Z",
+      "creator": ["urn:spdx.dev:iamwillbar"],
+      "specVersion": "3.0",
+      "profile": ["Core"],
+      "dataLicense": "CC0-1.0",
+      "name": "William Bartholomew"
+    },
+    {
+      "id": "urn:spdx.dev:project",
+      "type": {
+        "annotation": {
+          "annotationType": "review",
+          "subject": "urn:spdx.dev:project"
+        }
+      },
+      "created": "2022-04-02T10:28:00.000Z",
+      "creator": ["urn:spdx.dev:iamwillbar"],
+      "specVersion": "3.0",
+      "profile": ["Core"],
+      "dataLicense": "CC0-1.0",
+      "description": "dummy self-referencing element needed for unspecified 'project' example"
+    },
+    {
+      "id": "urn:spdx.dev:docs/doc1",
+      "type": {
+        "spdxDocument": {
+          "namespace": "urn:spdx.dev:",
+          "elements": [
+            "urn:spdx.dev:iamwillbar",
+            "urn:spdx.dev:project",
+            "urn:spdx.dev:docs/doc1"
+          ],
+          "downloadLocation": "https://spdx.dev/docs/doc1-v1.0.json"
+        }
+      },
+      "created": "2022-04-02T10:28:00.000Z",
+      "creator": ["urn:spdx.dev:iamwillbar"],
+      "specVersion": "3.0",
+      "profile": ["Core"],
+      "dataLicense": "CC0-1.0",
+      "verifiedUsing": [
+        {
+          "hashes": {
+            "sha256": "14a657a7118a333cc1fdc6af05071a59cda067fd11130d4ee5d6d47c26e7863f"
+          }
+        }
+      ]
+    }
+  ],
+  "spdxDocumentId": "urn:spdx.dev:docs/doc1"
+}

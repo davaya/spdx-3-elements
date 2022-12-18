@@ -13,12 +13,10 @@
       "detailsUrl": "https://spdx.org/licenses/CC-BY-NC-ND-3.0.json"
     }
   },
-  "creator": [
-    {"organization": {"email": "license-authority@spdx.org"}}
-  ],
+  "creator": ["urn:spdx.org:identities:license-authority"],
   "created": "2022-04-02T11:00:00Z",
   "specVersion": "3.0",
-  "profiles": ["Core", "License"],
+  "profile": ["Core", "License"],
   "dataLicense": "CC0-1.0",
   "name": "Creative Commons Attribution Non Commercial No Derivatives 3.0 Unported"
 }

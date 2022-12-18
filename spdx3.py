@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 SCHEMA = 'Schemas/spdx-v3.jidl'
 DATA_DIR = 'Elements'
 OUTPUT_DIR = 'Out'
-DEFAULT_PROPERTIES = ('creator', 'created', 'specVersion', 'profiles', 'dataLicense')
+DEFAULT_PROPERTIES = ('creator', 'created', 'specVersion', 'profile', 'dataLicense')
 IRI_LOCATIONS = ['@id', 'created/by', '*/elements/*', 'relationship/from', 'relationship/to/*',
                  '*/originator', 'elementRefs/id', 'annotation/subject']
 
@@ -77,15 +77,14 @@ def compress_ids(context: dict, element: dict) -> None:
     """
     Convert all IRIs in an element from absolute IRI to namespace:local form
 
-    Add all IRIs in the element to context['ids']
+    Add all IRIs in the element to context['ids'] if present
     Hardcode IRI locations for now; replace with path-driven update
     """
     ids = [element['id']]
     element.update({'id': compress_iri(context, element['id'])})
-    # if 'creator' in element:
-        # ids += [element['creator']]
-        # element['creator'] = [compress_iri(context, k) for k in [element['creator']]]
-        # element['creator'] = compress_iri(context, element['creator'])
+    if 'creator' in element:
+        ids += [element['creator']]
+        element['creator'] = [compress_iri(context, k) for k in [element['creator']]]
     for etype, eprops in element['type'].items():
         for p in eprops:
             if p in ('elements', 'rootElements', 'originator', 'members'):
@@ -98,7 +97,8 @@ def compress_ids(context: dict, element: dict) -> None:
             ids += [eprops['from']] + eprops['to']
             eprops['from'] = compress_iri(context, eprops['from'])
             eprops['to'] = [compress_iri(context, k) for k in eprops['to']]
-    context['ids'] += ids
+    if 'ids' in context:
+        context['ids'] += ids
 
 
 def expand_element(context: dict, element: dict) -> dict:
@@ -132,13 +132,19 @@ def read_elements(dirname: str, codec: jadn.codec.Codec):
 
 def load_element(path: str, codec: jadn.codec.Codec) -> dict:
     with open(path) as fp:
+        # print(f'Load {path}')
         return codec.decode('Element', json.load(fp))
 
 
 def load_codec() -> jadn.codec.Codec:
     with open(SCHEMA) as fp:
         schema = jadn.load_any(fp)
+    print(f'{SCHEMA}:\n' + '\n'.join([f'{k:>15}: {v}' for k, v in jadn.analyze(jadn.check(schema)).items()]))
     return jadn.codec.Codec(schema, verbose_rec=True, verbose_str=True)
+
+
+def element_type(element: dict) -> str:
+    return element['type'].keys()
 
 
 class SpdxFile():
@@ -171,27 +177,57 @@ class SpdxFile():
         sfile.update({k: ed[k] for k in DEFAULT_PROPERTIES})
 
         elist = config['include']
+        elements = set()
         while elist:
             sfile['ids'] = []
             [compress_ids(sfile, ex[k]) for k in elist]        # Find all ids in element
-            sfile['elements'] = sfile['ids']
+            elements |= set(sfile['ids'])
             elist = [k for k in sfile['ids'] if k not in elist]
         # sfile['creator'] = [compress_iri(sfile, k) for k in [sfile['creator']]]
         # sfile['creator'] = compress_iri(sfile, sfile['creator'])
         del sfile['ids']
+        sfile['elements'] = list(elements)
 
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
             json.dump(sfile, ofile, indent=2)
 
-    def merge(self, doc: str):
+    def merge(self, doc: str = ''):
         """
-        Merge a set of independent elements into an SPDX file (payload)
+        Merge elements listed in SpdxDocument element into SPDX file (payload)
 
-        DOC: SpdxDocument element that lists the elements to include in the SPDX file
+        DOC: SpdxDocument id, or blank to create files from all SpdxDocument elements
         """
         codec = load_codec()
-        element = load_element(doc, codec)
+        elements = read_elements(DATA_DIR, codec)
+        os.makedirs(os.path.join(OUTPUT_DIR, 'documents'), exist_ok=True)
+        ex = {e['id']: e for e in elements}
+        used = set()
+        docs = [doc] if doc else [d for d in ex if list(ex[d]['type'].keys())[0] == 'spdxDocument']
+        print(f'{len(docs)} documents, {len(elements)} elements')
+        for n, dx in enumerate(docs, start=1):
+            d = ex[dx]['type']['spdxDocument']
+            print(f"{n:3}: {len(d['elements']):>3} elements, {len(d.get('documentRefs', []))} refs, {dx}")
+            payload = {'namespace': d['namespace']}
+            p = d.get('prefixes', {})
+            payload.update({'prefixes': p} if p else {})
+            payload.update({k: v for k, v in ex[dx].items() if k in DEFAULT_PROPERTIES})
+            used |= set(d['elements'])
+            payload['elements'] = [ex[e] for e in d['elements']]
+            if dx in d['elements']:
+                payload['spdxDocumentId'] = dx
+            payload_filename = os.path.splitext(os.path.split(d.get('downloadLocation', f'payload{n}'))[1])[0]
+            with open(os.path.join(OUTPUT_DIR, 'documents', f'{payload_filename}_x.json'), 'w') as ofile:
+                json.dump(pl := codec.encode("Payload", payload), ofile, indent=2)
+            pl['elements'] = [compress_element(pl, e) for e in pl['elements']]
+            pl['creator'] = [compress_iri(pl, p) for p in pl['creator']]
+            for p in ('spdxDocumentId', ):
+                if p in pl:
+                    pl[p] = compress_iri(pl, pl[p])
+            with open(os.path.join(OUTPUT_DIR, 'documents', f'{payload_filename}.json'), 'w') as ofile:
+                json.dump(pl, ofile, indent=2)
+        print('\nNot serialized:')
+        print('\n'.join((f'{list(ex[k]["type"].keys())[0]:>12}: {k} (  )' for k in set(ex) - used)))
 
     def split(self, spdx_file: str):
         """

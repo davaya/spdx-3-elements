@@ -1,0 +1,13 @@
+{
+  "id": "urn:spdx.org:identities:license-authority",
+  "type": {
+    "organization": {
+      "identifiedBy": [{"email": "license-authority@spdx.org"}]
+    }
+  },
+  "creator": ["urn:spdx.org:identities:license-authority"],
+  "created": "2022-04-02T11:00:00Z",
+  "specVersion": "3.0",
+  "profile": ["Core", "License"],
+  "dataLicense": "CC0-1.0"
+}
