@@ -2,7 +2,7 @@
   "id": "urn:acme.dev:sboms:gnu-coreutils/v9.1",
   "type": {
     "sbom": {
-      "elements": [
+      "element": [
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/du.c",
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/echo.c",
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1",

@@ -9,14 +9,14 @@
 Elements = ArrayOf(Element){1..*} unique          // Serialized set of independent Element values
 
 Payload = Record                                  // Serialized file (or equivalent) for transferring Elements
-   1 namespace        IRI optional                // Default namespace for Element ids in this file (rdf BASE)
+   1 namespace        IRI                         // Default namespace for Element ids in this file (rdf BASE)
    2 prefixes         NamespaceMap optional       // Namespace abbreviations used in this file (rdf PREFIX)
    3 created          DateTime                    // File creation info and element defaults
    4 creator          Link(Element) [1..*]        // File creation info and element defaults - Link(Identity)
    5 specVersion      SemVer                      // File creation info and element defaults
    6 profile          ProfileIdentifier [1..*]    // File creation info and element defaults
    7 dataLicense      LicenseId                   // File creation info and element defaults
-   8 elements         Element unique [1..*]       // Element values, defined in this file or copied
+   8 element          Element unique [1..*]       // Element values, defined in this file or copied
    9 spdxDocumentId   Link(Element) optional      // Optional SpdxDocument element that describes this file
 
 NamespaceMap = MapOf(Prefix, IRI){1..*}
@@ -79,14 +79,15 @@ Process = Record                                  // Tool as principal (under di
 SpdxDocument = Record                             // Statements about a serialized file. "verifiedUsing" is required.
    1 namespace        IRI optional                // Default namespace for Element ids in the SPDX file (rdf BASE)
    2 prefixes         NamespaceMap optional       // Namespace abbreviations used in the SPDX file (rdf PREFIX)
-   3 elements         Link(Element) [1..*]        // Elements contained in the payload
-   4 documentRefs     Link(Element) [0..*]        // SpdxDocuments containing elements referenced by the payload
+   3 element          Link(Element) [1..*]        // Elements contained in the payload
+   4 documentRef      Link(Element) [0..*]        // SpdxDocuments containing elements referenced by the payload
    5 downloadLocation URL optional                // Unique ID or Location of the payload
    6 import           ExternalMap [0..*]          // IRI assignment to non-element hashable data entities
 
 Bom = Record
-   1 elements         Link(Element) [1..*]        // <-Collection
-   2 rootElements     Link(Element) [0..*]        // <-Collection  This element is a root. Other containers that it contains?
+   1 element          Link(Element) [1..*]        // <-Collection
+   2 rootElement      Link(Element) [0..*]        // <-Collection  This element is a root. Other containers that it contains?
+   3 import           ExternalMap [0..*]          // <-Collection  IRI assignment to non-element hashable data entities
 
 Snippet = Record
    1 location         SnippetLocation
@@ -105,8 +106,9 @@ Package = Record
    4 originator       Link(Element) [0..*]        // <-Artifact:  Link(Identity)
 
 Sbom = Record
-   1 elements         Link(Element) [1..*]        // <-Collection
-   2 rootElements     Link(Element) [0..*]        // <-Collection
+   1 element          Link(Element) [1..*]        // <-Collection
+   2 rootElement      Link(Element) [0..*]        // <-Collection
+   3 import           ExternalMap [0..*]          // <-Collection
 
 License = Record
    1 licenseId        String
@@ -123,12 +125,28 @@ Identifier = Choice
 
 IntegrityMethod = Choice
    1 hash             Hashes
-   2 signature        PublicKeySignature          // A public key by itself is not a checksum
+   2 signature        PublicKeySignature          // A public key by itself is not an integrity check
 
 Hashes = Map{1..*}
-   1 md5              Binary{16..16} /x optional
-   2 sha1             Binary{20..20} /x optional
+   1 sha1             Binary{20..20} /x optional
+   2 sha224           Binary{28..28} /x optional
    3 sha256           Binary{32..32} /x optional
+   4 sha384           Binary{48..48} /x optional
+   5 sha512           Binary{64..64} /x optional
+   6 sha3_224         Binary{28..28} /x optional
+   7 sha3_256         Binary{32..32} /x optional
+   8 sha3_384         Binary{48..48} /x optional
+   9 sha3_512         Binary{64..64} /x optional
+  10 md2              Binary{16..16} /x optional
+  11 md4              Binary{16..16} /x optional
+  12 md5              Binary{16..16} /x optional
+  13 md6_128          Binary{16..16} /x optional // Digest length?
+  20 spdx_pvc_sha1    Binary{20..20} /x optional
+  21 spdx_pvc_sha256  Binary{32..32} /x optional
+  22 blake2b_256      Binary{32..32} /x optional
+  23 blak32b_384      Binary{48..48} /x optional
+  24 blake2b_512      Binary{64..64} /x optional
+  25 blake3           Binary{32..32} /x optional
 
 PublicKeySignature = Record
 

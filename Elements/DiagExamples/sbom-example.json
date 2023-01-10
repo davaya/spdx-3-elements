@@ -14,7 +14,7 @@
     {"elementId": "urn:spdx.dev:doc", "elementURL": "https://spdx.dev/docs/v1.0.json", "verifiedUsing": [{
       "@type": "Hash"}]}
   ],
-  "elements": [
+  "element": [
     {
       "@type": "Person",
       "@id": "urn:spdx.dev:iamwillbar",

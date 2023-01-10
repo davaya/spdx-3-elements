@@ -2,7 +2,7 @@
   "id": "http://sw.baker.org/widget-v2.3",
   "type": {
     "sbom": {
-      "elements": [
+      "element": [
         "http://sw.baker.org/pkgs/widget-v2.3",
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1"
       ]

@@ -3,7 +3,7 @@
   "type": {
     "spdxDocument": {
       "namespace": "urn:acme.dev:",
-      "elements": [
+      "element": [
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/du.c",
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1/src/echo.c",
         "urn:acme.dev:artifacts:gnu-coreutils/v9.1",

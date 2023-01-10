@@ -14,7 +14,7 @@
     {
       "@type": "SBOM",
       "@id": "urn:spdx.dev:null-sbom",
-      "elements": ["urn:spdx.dev:iamwillbar", "urn:spdx.dev:spdx-tools-3.0.1"],
+      "element": ["urn:spdx.dev:iamwillbar", "urn:spdx.dev:spdx-tools-3.0.1"],
       "rootElements": ["urn:spdx.dev:spdx-tools-3.0.1"]
     },
     {

@@ -63,7 +63,7 @@ def expand_ids(context: dict, element: dict, paths: list) -> None:
         element['creator'] = [expand_iri(context, k) for k in [element['creator']]]
     for etype, eprops in element['type'].items():
         for p in eprops:
-            if p in ('elements', 'rootElements', 'originator', 'members'):
+            if p in ('element', 'rootElement', 'originator', 'members'):
                 eprops[p] = [expand_iri(context, k) for k in eprops[p]]
         if etype == 'annotation':
             eprops['subject'] = expand_iri(context, eprops['subject'])
@@ -86,7 +86,7 @@ def compress_ids(context: dict, element: dict) -> None:
         element['creator'] = [compress_iri(context, k) for k in [element['creator']]]
     for etype, eprops in element['type'].items():
         for p in eprops:
-            if p in ('elements', 'rootElements', 'originator', 'members'):
+            if p in ('element', 'rootElement', 'originator', 'members'):
                 ids += eprops[p]
                 eprops[p] = [compress_iri(context, k) for k in eprops[p]]
         if etype == 'annotation':
@@ -185,7 +185,7 @@ class SpdxFile():
         # sfile['creator'] = [compress_iri(sfile, k) for k in [sfile['creator']]]
         # sfile['creator'] = compress_iri(sfile, sfile['creator'])
         del sfile['ids']
-        sfile['elements'] = list(elements)
+        sfile['element'] = list(elements)
 
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(os.path.join(OUTPUT_DIR, config['filename']), 'w') as ofile:
@@ -206,19 +206,19 @@ class SpdxFile():
         print(f'\n{len(docs)} documents, {len(elements)} elements')
         for n, dx in enumerate(docs, start=1):
             d = ex[dx]['type']['spdxDocument']
-            print(f"{n:3}: {len(d['elements']):>3} elements, {len(d.get('documentRefs', []))} refs, {dx}")
+            print(f"{n:3}: {len(d['element']):>3} elements, {len(d.get('documentRef', []))} refs, {dx}")
             payload = {'namespace': d['namespace']}
             p = d.get('prefixes', {})
             payload.update({'prefixes': p} if p else {})
             payload.update({k: v for k, v in ex[dx].items() if k in DEFAULT_PROPERTIES})
-            used |= set(d['elements'])
-            payload['elements'] = [ex[e] for e in d['elements']]
-            if dx in d['elements']:
+            used |= set(d['element'])
+            payload['element'] = [ex[e] for e in d['element']]
+            if dx in d['element']:
                 payload['spdxDocumentId'] = dx
             payload_filename = os.path.splitext(os.path.split(d.get('downloadLocation', f'payload{n}'))[1])[0]
             with open(os.path.join(OUTPUT_DIR, 'documents', f'{payload_filename}_x.json'), 'w') as ofile:
                 json.dump(pl := codec.encode("Payload", payload), ofile, indent=2)
-            pl['elements'] = [compress_element(pl, e) for e in pl['elements']]
+            pl['element'] = [compress_element(pl, e) for e in pl['element']]
             pl['creator'] = [compress_iri(pl, p) for p in pl['creator']]
             for p in ('spdxDocumentId', ):
                 if p in pl:

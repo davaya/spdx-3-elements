@@ -4,11 +4,11 @@
     "spdxDocument": {
       "namespace": "http://sw.baker.org/",
       "prefixes": {"acme": "urn:acme.dev:"},
-      "elements": [
+      "element": [
         "http://sw.baker.org/pkgs/widget-v2.3"
       ],
       "downloadLocation": "http://sw.baker.org/spdx-files/widget-v2.3.json",
-      "documentRefs": ["urn:acme.dev/spdxdocs/acme/gnu-coreutils-sbom"]
+      "documentRef": ["urn:acme.dev/spdxdocs/acme/gnu-coreutils-sbom"]
     }
   },
   "creator": ["http://sw.baker.org/ids/betty"],

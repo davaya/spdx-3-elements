@@ -13,7 +13,11 @@ OUTPUT_DIR = 'Out'
 
 def translate(filename: str, sdir: str, odir: str) -> NoReturn:
     with open(os.path.join(sdir, filename)) as fp:
-        schema = jadn.load_any(fp)
+        try:
+            schema = jadn.load_any(fp)
+        except ValueError as e:
+            print(f'{filename}: {e}')
+            return
     print(f'{filename}:\n' + '\n'.join([f'{k:>15}: {v}' for k, v in jadn.analyze(jadn.check(schema)).items()]))
 
     fn, ext = os.path.splitext(filename)
